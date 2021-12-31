@@ -32,7 +32,6 @@ promiseProduct
 
     //boucle pour générer chaque option de couleur dans le menu déroulant
     let tabCol = productData['colors']; 
-    //console.log(tabCol);
     let affichageCol = '';
 
     for (let i of tabCol) {
@@ -43,30 +42,37 @@ promiseProduct
     // gestion de la sélection de l'utilisateur
     // selection du bouton ajouter au panier
     const btn_addBasket = document.querySelector('#addToCart');
-    //console.log(btn_addBasket)
-
+    
     //Ecouter le bouton et empêcher reactualisation de la page au click
     btn_addBasket.addEventListener('click', (event)=> {
         event.preventDefault();
         // mettre le choix couleur de l'utilisateur dans une variable
         let colSelected = document.querySelector('#colors').value ;
-        //console.log(colSelected);
+        
         // mettre le nombre d'item sélectionnés dans une variable
         const numberItem = document.querySelector('#quantity').value; 
-        //console.log(numberItem);
-        
+
+        //fonction de confirmation ajout au panir
+        const confirmWindow = () => {
+            if(window.confirm(`${productData.nom} option : ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
+                window.location.href = "cart.html"        
+            }else{
+                window.location.href = "index.html";
+                basket.remove(selection);
+            }
+        }
         // récupérer les valeurs sélectionnées
         let selection = {
             id : productData._id,
-            nom_produit : productData.name,
+            nom : productData.name,
             quantity : numberItem,
             option_produit : colSelected,
             prix : affichagePrice
         }
-        console.log(selection);
+        //console.log(selection);
         basket.add(selection);
         basket.save(selection);
-        
+        confirmWindow()
     
     });
     
