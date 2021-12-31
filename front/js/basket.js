@@ -48,7 +48,7 @@ class Basket {
     getTotalPrice() {
         let total = 0;
         for (let product of this.basket) {
-            total += product.quantity * product.price;
+            total += product.quantity * product.prix;
         }
         return total; 
     }
@@ -56,25 +56,25 @@ class Basket {
 
 let basket = new Basket();
 console.log(basket);
-
-let affichageItems = '';
-
-
-/*affichageItems +=
-    `<article class="cart__item" data-id="${product-ID}" data-color="${product-color}">
+const panier = localStorage.getItem(basket);
+console.log(panier);
+let affichageItems;
+for(item in basket) {
+    affichageItems +=
+    `<article class="cart__item" data-id="${basket.id}" data-color="${basket.option_produit}">
         <div class="cart__item__img">
-            <img src="${images}" alt="${Photographie}">
+            <img src="" alt="text alt">
         </div>
         <div class="cart__item__content">
             <div class="cart__item__content__description">
-                <h2>${Nom}</h2>
-                    <p>${Vert}</p>
-                    <p>${42,00} €</p>
+                <h2>${basket.nom}</h2>
+                    <p>${basket.option_produit}</p>
+                    <p>${basket.prix} €</p>
             </div>
             <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
                     <p>Qté : </p>
-                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${42}">
+                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${basket.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
                     <p class="deleteItem">Supprimer</p>
@@ -82,5 +82,10 @@ let affichageItems = '';
             </div>
         </div>
     </article>`
-}document.querySelector('#cart__items').innerHTML = affichageItems.
-*/
+    }
+    document.querySelector('#cart__items').innerHTML = document.querySelector('#cart__items').innerHTML + affichageItems;
+
+
+
+
+
