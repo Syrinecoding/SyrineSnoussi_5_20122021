@@ -56,8 +56,8 @@ class Basket {
 
 let basket = new Basket();
 console.log(basket);
-const panier = localStorage.getItem(basket);
-console.log(panier);
+
+
 let affichageItems;
 for(item in basket) {
     affichageItems +=
