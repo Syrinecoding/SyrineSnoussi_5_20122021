@@ -55,13 +55,12 @@ class Basket {
 }
 
 let basket = new Basket();
-console.log(basket)
-let basketLongueur = basket.getNumberProduct();
-//console.log(basketLongueur);
+console.log(basket);
 
 let affichageItems = '';
-for (let item of basket) {
-    affichageItems +=
+
+
+/*affichageItems +=
     `<article class="cart__item" data-id="${product-ID}" data-color="${product-color}">
         <div class="cart__item__img">
             <img src="${images}" alt="${Photographie}">
@@ -83,6 +82,5 @@ for (let item of basket) {
             </div>
         </div>
     </article>`
-}
-document.querySelector('#cart__items').innerHTML = affichageItems
-
+}document.querySelector('#cart__items').innerHTML = affichageItems.
+*/

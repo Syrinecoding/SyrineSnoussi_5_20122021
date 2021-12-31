@@ -58,7 +58,7 @@ promiseProduct
                 window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
-                basket.remove(selection);
+
             }
         }
         // récupérer les valeurs sélectionnées
