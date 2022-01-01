@@ -6,7 +6,7 @@ const queryUrl= window.location.href;
 const url = new URL(queryUrl);
 //console.log(url);
 const id = url.searchParams.get('id');
-console.log(id);
+//console.log(id);
 
 
 //attribuer les valeurs de l'objet au html
@@ -64,10 +64,12 @@ promiseProduct
         // récupérer les valeurs sélectionnées
         let selection = {
             id : productData._id,
+            image : productData.imageUrl,
+            texteAlt : productData.altTxt,
             nom : productData.name,
             quantity : numberItem,
             option_produit : colSelected,
-            prix : affichagePrice
+            prix : affichagePrice,
         }
         //console.log(selection);
         basket.add(selection);
