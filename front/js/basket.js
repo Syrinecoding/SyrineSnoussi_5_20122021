@@ -20,6 +20,7 @@ class Basket {
         } else {
             product.quantity = 1;
             this.basket.push(product);
+            //verifier ici si ce n'est pas ce qui bloque le nombre à 1 quelque soit la valeur affichée.
         }
         this.save();
     }
@@ -28,7 +29,7 @@ class Basket {
         this.save();
     }
     changeQuantity(product, quantity) {
-        let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit == product.option_produit );
+        let foundProduct = this.basket.find(p => p.id == product.id &&p.option_produit);
         if (foundProduct != undefined) {
             foundProduct.quantity += quantity;
             if (foundProduct.quantity <= 0) {

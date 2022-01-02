@@ -53,14 +53,7 @@ promiseProduct
         const numberItem = document.querySelector('#quantity').value; 
 
         //fonction de confirmation ajout au panir
-        const confirmWindow = () => {
-            if(window.confirm(`${productData.nom} option : ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
-                window.location.href = "cart.html"        
-            }else{
-                window.location.href = "index.html";
-
-            }
-        }
+      
         // récupérer les valeurs sélectionnées
         let selection = {
             id : productData._id,
@@ -71,7 +64,15 @@ promiseProduct
             option_produit : colSelected,
             prix : affichagePrice,
         }
-        //console.log(selection);
+        const confirmWindow = () => {
+            if(window.confirm(`${numberItem} ${selection.nom} option : ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
+                window.location.href = "cart.html"        
+            }else{
+                window.location.href = "index.html";
+
+            }
+        }
+        console.log(selection);
         basket.add(selection);
         basket.save(selection);
         confirmWindow()
