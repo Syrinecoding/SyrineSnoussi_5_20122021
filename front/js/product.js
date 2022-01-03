@@ -74,7 +74,7 @@ promiseProduct
         }
         console.log(selection);
         basket.add(selection);
-        basket.save(selection);
+        
         confirmWindow()
     
     });

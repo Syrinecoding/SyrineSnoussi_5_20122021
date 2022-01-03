@@ -16,9 +16,9 @@ class Basket {
     add(product) {
         let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit == product.option_produit);
         if (foundProduct != undefined) {
-            foundProduct.quantity++;
+            foundProduct.quantity = product.quantity;
         } else {
-            product.quantity = 1;
+            //product.quantity = 1;
             this.basket.push(product);
             //verifier ici si ce n'est pas ce qui bloque le nombre à 1 quelque soit la valeur affichée.
         }
