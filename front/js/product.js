@@ -39,20 +39,14 @@ promiseProduct
     }
     document.querySelector('#colors').innerHTML = document.querySelector('#colors').innerHTML + affichageCol;
 
-    // gestion de la sélection de l'utilisateur
-    // selection du bouton ajouter au panier
+            // **** gestion de la sélection de l'utilisateur ****
     const btn_addBasket = document.querySelector('#addToCart');
-    
     //Ecouter le bouton et empêcher reactualisation de la page au click
     btn_addBasket.addEventListener('click', (event)=> {
-        event.preventDefault();
-        // mettre le choix couleur de l'utilisateur dans une variable
+        event.preventDefault();  
+        // mettre le choix couleur et le nombre de l'utilisateur dans des variables
         let colSelected = document.querySelector('#colors').value ;
-        
-        // mettre le nombre d'item sélectionnés dans une variable
         const numberItem = document.querySelector('#quantity').value; 
-
-        //fonction de confirmation ajout au panir
       
         // récupérer les valeurs sélectionnées
         let selection = {
@@ -69,16 +63,12 @@ promiseProduct
                 window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
-
             }
         }
         console.log(selection);
-        basket.add(selection);
-        
+        cart.add(selection);
         confirmWindow()
-    
-    });
-    
+    }); 
 })
 )
 .catch(err => console.log('Erreur : ' + err));
