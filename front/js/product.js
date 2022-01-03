@@ -63,11 +63,22 @@ promiseProduct
                 window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
+                cart.remove(selection);
             }
         }
         console.log(selection);
-        cart.add(selection);
-        confirmWindow()
+        
+
+        if(colSelected != '' && numberItem != 0) {
+            cart.add(selection);
+            confirmWindow()
+        }else if(colSelected != '') {
+            alert(`Veuillez indiquer le nombre ${selection.nom} souhaités`);
+        }else{
+            alert(`Veuillez choisir une couleur`);
+        }
+        
+        
     }); 
 })
 )
