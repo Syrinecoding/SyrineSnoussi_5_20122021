@@ -55,8 +55,8 @@ class Basket {
     }
 }
 
-let basket = new Basket();
-console.log(basket);
+let cart = new Basket();
+console.log(cart);
 
 
 

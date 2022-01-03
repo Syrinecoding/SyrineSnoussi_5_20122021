@@ -25,7 +25,7 @@ basket.basket.forEach(product => {
     </article>`;
 }); */
 let carte = '';
-let tabItems = basket.basket;
+let tabItems = cart.basket;
 for (let product of tabItems) {
     carte += 
         `<article class="cart__item" data-id="${product.id}" data-color="${product.option_produit}">
