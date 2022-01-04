@@ -1,6 +1,7 @@
 // affichage des produits dans le panier :
 let carte = '';
 let tabItems = cart.basket;
+//console.log(tabItems);
 for (let product of tabItems) {
     carte += 
         `<article class="cart__item" data-id="${product.id}" data-color="${product.option_produit}">
@@ -29,27 +30,17 @@ document.querySelector('#cart__items').innerHTML = carte;
 
 
 //modification du nombre d'items :
-const inputNumber = document.querySelectorAll('input[type=number]');
+    //sélectionner tous les input number
+let inputNumber = document.querySelectorAll('input[type=number]');
 console.log(inputNumber);
-for(e of inputNumber) {
-    console.log(e.value);   
-    addEventListener("change", function() {
-        //cart.changeQuantity();
-        //e.textContent = this.value;
-        //console.log(e);
+for (let j of inputNumber) {
+    j.addEventListener('change', (event) => {
+        console.log(event);
+        j = this.value; 
+        console.log(j)
+        //inputNumber[j].quantity = cart.changeQuantity();
         
     }
-    ) 
-    
+    )
 }
 
-
-
-/*numberItem.addEventListener('change', function() {
-    cart.changeQuantity();
-    console.log(cart);
-});
-
-numberItem.addEventListener('change', function(){
-    numberItem.textContent = this.value;
-});*/
