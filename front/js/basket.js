@@ -29,10 +29,10 @@ class Basket {
         this.save();
     }
     changeQuantity(product, quantity) {
-        let foundProduct = this.basket.find(p => p.id == product.id &&p.option_produit);
+        let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit);
         if (foundProduct != undefined) {
             foundProduct.quantity += quantity;
-            if (foundProduct.quantity <= 0) {
+            if (foundProduct.quantity < 1) {
                 this.remove(foundProduct);
             } else {
                 this.save();

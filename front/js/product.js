@@ -59,7 +59,7 @@ promiseProduct
             prix : affichagePrice,
         }
         const confirmWindow = () => {
-            if(window.confirm(`${numberItem} ${selection.nom} option : ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
+            if(window.confirm(`${numberItem} ${selection.nom} couleur ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
                 window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
