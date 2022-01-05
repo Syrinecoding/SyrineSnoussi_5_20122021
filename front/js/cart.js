@@ -32,14 +32,20 @@ document.querySelector('#cart__items').innerHTML = carte;
 //modification du nombre d'items :
     //sélectionner tous les input number
 let inputNumber = document.querySelectorAll('input[type=number]');
-console.log(inputNumber);
+//console.log(inputNumber);
+//boucle pour récupérer les modifications de quantité sur le panier
 for (let j of inputNumber) {
     j.addEventListener('change', (event) => {
-        console.log(event);
-        j = this.value; 
-        console.log(j)
-        //inputNumber[j].quantity = cart.changeQuantity();
-        
+        // récupérer la nouvelle valeur:
+        let newArticleQuantity = event.target.value;
+        console.log(newArticleQuantity);
+        //récupérer l'id et la couleur de l'article modifié
+        let changedArticle = j.closest(".cart__item");
+        console.log(changedArticle);
+        let changedArticleId = changedArticle.dataset.id;
+        console.log(changedArticleId);
+        let changedArticleColor = changedArticle.dataset.color;
+        console.log(changedArticleColor);
     }
     )
 }
