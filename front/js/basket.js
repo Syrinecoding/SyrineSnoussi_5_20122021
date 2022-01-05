@@ -25,13 +25,13 @@ class Basket {
         this.save();
     }
     remove(product) {
-        this.basket = this.basket.filter(p => p.id != product.id && p.option_produit == product.option_produit);
+        this.basket = this.basket.filter(p => p.id != product.id && p.option_produit != product.option_produit);
         this.save();
     }
     changeQuantity(product, quantity) {
         let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit);
         if (foundProduct != undefined) {
-            foundProduct.quantity += quantity;
+            foundProduct.quantity = quantity;
             if (foundProduct.quantity < 1) {
                 this.remove(foundProduct);
             } else {
@@ -52,6 +52,14 @@ class Basket {
             total += product.quantity * product.prix;
         }
         return total; 
+    }
+    findProduct(id, color) {
+        let foundProduct = this.basket.find(p => p.id == id && p.option_produit == color);
+        if(foundProduct != undefined) {
+            return foundProduct;
+        } else {
+            console.log("no product found");
+        }
     }
 }
 
