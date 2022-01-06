@@ -82,18 +82,19 @@ for(let k of delete_btn) {
             let sectionArticles = document.querySelector('#cart__items');
             sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
         }
+       
     });
 }
 
 // affichage et calcul du total des articles et de la somme totale
-const totals = () => {
-    let totalArticles = document.querySelector('#totalQuantity');
+
+    /*let totalArticles = document.querySelector('#totalQuantity');
     let numberProducts = cart.getNumberProduct();
     console.log(numberProducts);
-    totalArticles.innerHTML = numberProducts;
+    totalArticles.innerHTML = numberProducts;*/
     
-    let totalPrice = document.querySelector('#totalPrice');
-    let total = cart.getTotalPrice();
-    totalPrice.innerHTML = total;
-};
-totals()
+let totalPrice = document.querySelector('#totalPrice');
+let total = cart.getTotalPrice();
+totalPrice.innerHTML = total;
+
+// les sommes ne se remettent pas à jour
