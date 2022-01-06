@@ -58,9 +58,12 @@ promiseProduct
             option_produit : colSelected,
             prix : affichagePrice,
         }
+
+        // faire le contraire : ne pas mettre dans le panier tant que pas confirmé:
         const confirmWindow = () => {
             if(window.confirm(`${numberItem} ${selection.nom} couleur ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
-                window.location.href = "cart.html"        
+                window.location.href = "cart.html"    
+                //utiliser opérateur ternaire pour la conjugaison    
             }else{
                 window.location.href = "index.html";
                 cart.remove(selection);
@@ -73,7 +76,7 @@ promiseProduct
             cart.add(selection);
             confirmWindow()
         }else if(colSelected != '') {
-            alert(`Veuillez indiquer le nombre ${selection.nom} souhaités`);
+            alert(`Veuillez indiquer le nombre de ${selection.nom} souhaité`);
         }else{
             alert(`Veuillez choisir une couleur`);
         }

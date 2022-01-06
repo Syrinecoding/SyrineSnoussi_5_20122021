@@ -59,19 +59,20 @@ let delete_btn = document.querySelectorAll('.deleteItem');
 for(let k of delete_btn) {
     k.addEventListener('click', () => {
         let itemToDelete = k.closest(".cart__item");
-        console.log(itemToDelete);
+        //console.log(itemToDelete);
         //récupérer son id et sa couleur :
         let idToDelete = itemToDelete.dataset.id;
         let colorToDelete = itemToDelete.dataset.color;
-        console.log(idToDelete + ' ' + colorToDelete);
+        //console.log(idToDelete + ' ' + colorToDelete);
         // trouver la référence de l'article à supprimer
         let removingItem = cart.findProduct(idToDelete, colorToDelete);
-        console.log(removingItem);
+        //console.log(removingItem);
         //supprimer l'article du panier
         cart.remove(removingItem);
         // supprimer l'article du DOM
-        if (cart.length >=0){
-            itemToDelete.innerHTML = "<h2>L'article a bien été supprimé du panier</h2>"
+        if (cart.length > 0){
+            document.querySelector('#cart__items').removeChild(itemToDelete);
+            //itemToDelete.innerHTML = "<h2>L'article a bien été supprimé du panier</h2>"
         } else {
             let sectionArticles = document.querySelector('#cart__items');
             sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"

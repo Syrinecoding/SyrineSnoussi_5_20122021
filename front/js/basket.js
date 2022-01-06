@@ -9,18 +9,22 @@ class Basket {
             //convertir les objets du local storage en format js.
         }
     }
+    get length() {
+        return this.basket.length;
+    }
     save() {
         //enregistre le panier dans localStorage : clé : 'basket' et valeur :(variable) basket.
         localStorage.setItem('basket', JSON.stringify(this.basket));
     }
     add(product) {
-        let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit == product.option_produit);
+        //let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit == product.option_produit);
+        let foundProduct = this.findProduct(product.id, product.option_produit)
         if (foundProduct != undefined) {
             foundProduct.quantity = product.quantity;
         } else {
             //product.quantity = 1;
             this.basket.push(product);
-            //verifier ici si ce n'est pas ce qui bloque le nombre à 1 quelque soit la valeur affichée.
+            
         }
         this.save();
     }
@@ -29,7 +33,7 @@ class Basket {
         this.save();
     }
     changeQuantity(product, quantity) {
-        let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit);
+        let foundProduct = this.findProduct(product.id, product.option_produit);
         if (foundProduct != undefined) {
             foundProduct.quantity = quantity;
             if (foundProduct.quantity < 1) {
@@ -59,13 +63,14 @@ class Basket {
             return foundProduct;
         } else {
             console.log("no product found");
+            return null;
         }
     }
 }
 
 let cart = new Basket();
 console.log(cart);
-
+// jester pour tester
 
 
 
