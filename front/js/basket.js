@@ -46,10 +46,10 @@ class Basket {
     getNumberProduct() {
         let number = 0;
         for (let product of this.basket) {
-            number += product.quantity;
+            number += parseInt(product.quantity);
         }
         return number;
-        //Verifier comment additionner 
+    
     }
     getTotalPrice() {
         let total = 0;

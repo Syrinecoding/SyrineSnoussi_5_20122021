@@ -3,7 +3,17 @@ let carte = '';
 let tabItems = cart.basket;
 console.log(tabItems);
 
-// console.log(articlePrice);
+// affichage et calcul du total des articles et de la somme totale :
+const getTotals = () => {
+    
+    let totalArticles = document.querySelector('#totalQuantity');
+    totalArticles.innerHTML = cart.getNumberProduct();
+        
+    let totalPrice = document.querySelector('#totalPrice');
+    totalPrice.innerHTML = cart.getTotalPrice();
+}
+
+// pb : articlePrice ne se met à jour qu'au rechargement de la page.
 for (let product of tabItems) {
     let articlePrice = product.quantity * product.prix;
     carte += 
@@ -54,7 +64,7 @@ for (let j of inputNumber) {
         console.log(changingArticle);
         // modifier la quantité dans le panier
         cart.changeQuantity(changingArticle, newArticleQuantity);
-        
+        getTotals();
     }
     );
 }
@@ -82,19 +92,9 @@ for(let k of delete_btn) {
             let sectionArticles = document.querySelector('#cart__items');
             sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
         }
-       
+        getTotals();
     });
 }
+getTotals();
 
-// affichage et calcul du total des articles et de la somme totale
 
-    /*let totalArticles = document.querySelector('#totalQuantity');
-    let numberProducts = cart.getNumberProduct();
-    console.log(numberProducts);
-    totalArticles.innerHTML = numberProducts;*/
-    
-let totalPrice = document.querySelector('#totalPrice');
-let total = cart.getTotalPrice();
-totalPrice.innerHTML = total;
-
-// les sommes ne se remettent pas à jour
