@@ -49,6 +49,7 @@ class Basket {
             number += product.quantity;
         }
         return number;
+        //Verifier comment additionner 
     }
     getTotalPrice() {
         let total = 0;

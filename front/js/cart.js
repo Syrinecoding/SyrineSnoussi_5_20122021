@@ -1,8 +1,11 @@
 // affichage des produits dans le panier :
 let carte = '';
 let tabItems = cart.basket;
-//console.log(tabItems);
+console.log(tabItems);
+
+// console.log(articlePrice);
 for (let product of tabItems) {
+    let articlePrice = product.quantity * product.prix;
     carte += 
         `<article class="cart__item" data-id="${product.id}" data-color="${product.option_produit}">
         <div class="cart__item__img">
@@ -12,7 +15,7 @@ for (let product of tabItems) {
             <div class="cart__item__content__description">
                 <h2>${product.nom}</h2>
                     <p>${product.option_produit}</p>
-                    <p>${product.prix} €</p>
+                    <p>${articlePrice} €</p>
             </div>
             <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
@@ -51,9 +54,11 @@ for (let j of inputNumber) {
         console.log(changingArticle);
         // modifier la quantité dans le panier
         cart.changeQuantity(changingArticle, newArticleQuantity);
+        
     }
     );
 }
+
 // suppression d'un article du panier
 let delete_btn = document.querySelectorAll('.deleteItem');
 for(let k of delete_btn) {
@@ -80,3 +85,15 @@ for(let k of delete_btn) {
     });
 }
 
+// affichage et calcul du total des articles et de la somme totale
+const totals = () => {
+    let totalArticles = document.querySelector('#totalQuantity');
+    let numberProducts = cart.getNumberProduct();
+    console.log(numberProducts);
+    totalArticles.innerHTML = numberProducts;
+    
+    let totalPrice = document.querySelector('#totalPrice');
+    let total = cart.getTotalPrice();
+    totalPrice.innerHTML = total;
+};
+totals()
