@@ -70,7 +70,7 @@ class Basket {
 }
 
 let cart = new Basket();
-console.log(cart);
+//console.log(cart);
 // jester pour tester
 
 

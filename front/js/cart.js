@@ -1,7 +1,7 @@
 // affichage des produits dans le panier :
 let carte = '';
 let tabItems = cart.basket;
-console.log(tabItems);
+//console.log(tabItems);
 
 // affichage et calcul du total des articles et de la somme totale :
 const getTotals = () => {
@@ -51,17 +51,17 @@ for (let j of inputNumber) {
     j.addEventListener('change', (event) => {
         // récupérer la nouvelle valeur:
         let newArticleQuantity = event.target.value;
-        console.log(newArticleQuantity);
+        //console.log(newArticleQuantity);
         //récupérer l'id et la couleur de l'article modifié
         let changedArticle = j.closest(".cart__item");
-        console.log(changedArticle);
+        //console.log(changedArticle);
         let changedArticleId = changedArticle.dataset.id;
-        console.log(changedArticleId);
+        //console.log(changedArticleId);
         let changedArticleColor = changedArticle.dataset.color;
-        console.log(changedArticleColor);
+        //console.log(changedArticleColor);
         //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
         let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
-        console.log(changingArticle);
+        //console.log(changingArticle);
         // modifier la quantité dans le panier
         cart.changeQuantity(changingArticle, newArticleQuantity);
         getTotals();
@@ -87,7 +87,6 @@ for(let k of delete_btn) {
         // supprimer l'article du DOM
         if (cart.length > 0){
             document.querySelector('#cart__items').removeChild(itemToDelete);
-            //itemToDelete.innerHTML = "<h2>L'article a bien été supprimé du panier</h2>"
         } else {
             let sectionArticles = document.querySelector('#cart__items');
             sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
@@ -96,5 +95,34 @@ for(let k of delete_btn) {
     });
 }
 getTotals();
+/**************************************FORMULAIRE************************************** */
+
+
+// selection du bouton Commander 
+const orderBtn = document.querySelector('#order');
+// ecouter le bouton 
+orderBtn.addEventListener('click', (e) =>{
+    e.preventDefault();
+    
+   //récupérer les valeurs du formulaire
+   const Data = {
+       prenom : document.querySelector('#firstName').value,
+       nom : document.querySelector('#lastName').value,
+       adresse : document.querySelector('#address').value,
+       ville : document.querySelector('#city').value,
+       email : document.querySelector('#email').value
+   }
+    console.log(Data);
+    
+    // les mettre dans le localStorage
+    localStorage.setItem('Contact', JSON.stringify(Data));
+   
+    // mettre basket et Data dans un objet à envoyer
+    
+});  
+
+
+
+
 
 
