@@ -1,7 +1,8 @@
-// affichage des produits dans le panier :
+//récupérer le panier du localStorage
 let carte = '';
-let tabItems = cart.basket;
-//console.log(tabItems);
+const tabItems = cart.basket;
+console.log('basket tabItems:')
+console.log(tabItems);
 
 // affichage et calcul du total des articles et de la somme totale :
 const getTotals = () => {
@@ -12,7 +13,7 @@ const getTotals = () => {
     let totalPrice = document.querySelector('#totalPrice');
     totalPrice.innerHTML = cart.getTotalPrice();
 }
-
+// affichage des produits dans le panier :
 // pb : articlePrice ne se met à jour qu'au rechargement de la page.
 for (let product of tabItems) {
     let articlePrice = product.quantity * product.prix;
@@ -112,17 +113,44 @@ orderBtn.addEventListener('click', (e) =>{
        ville : document.querySelector('#city').value,
        email : document.querySelector('#email').value
    }
+    console.log('formulaire Data :')
     console.log(Data);
     
     // les mettre dans le localStorage
     localStorage.setItem('Contact', JSON.stringify(Data));
    
     // mettre basket et Data dans un objet à envoyer
-    
+    const sendOrder = {
+        tabItems,
+        Data
+    }
+    console.log("à envoyer :")
+    console.log(sendOrder)
+
+    // envoi de sendOrder vers le serveur:
 });  
 
-
-
+//------Conserver les data dans le champ du formulaire------
+// récupérer les data contact du localStorage
+function getContact() {
+    let contact = localStorage.getItem('Contact');
+    if (contact == null) {
+        return [];
+    } else {
+        return JSON.parse(contact);
+    }
+}
+//getContact();
+//console.log(getContact());
+let contact = getContact();
+console.log('contact :');
+console.log(contact);
+// conserver l'affichage du formulaire
+document.querySelector('#firstName').value = contact.prenom;
+document.querySelector('#lastName').value = contact.nom;
+document.querySelector('#address').value = contact.adresse;
+document.querySelector('#city').value = contact.ville;
+document.querySelector('#email').value = contact.email;
 
 
 
