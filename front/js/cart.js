@@ -133,26 +133,13 @@ form.addEventListener('submit', (e) =>{
         }
         console.log('formulaire Data :')
         console.log(Data);
-    } 
-// les mettre dans le localStorage
-    localStorage.setItem('Contact', JSON.stringify(Data));
-//------Conserver les data dans le champ du formulaire------
-    // récupérer les data contact du localStorage
-    function getContact() {
-        let contact = localStorage.getItem('Contact');
-        if (contact == null) {
-            return [];
-        } else {
-            return JSON.parse(contact);
-        }
+    } else {
+        return false;
     }
-    getContact();
-    console.log(getContact());
-    let contact = getContact();
-    console.log('contact :');
-    console.log(contact);
+    // les mettre dans le localStorage
+    localStorage.setItem('Contact', JSON.stringify(Data));
    
-//__________ mettre basket et Data dans un objet à envoyer________
+    //__________ mettre basket et Data dans un objet à envoyer________
     const sendOrder = {
         tabItems,
         Data
@@ -161,11 +148,33 @@ form.addEventListener('submit', (e) =>{
     console.log(sendOrder);
 }); 
 
+
+//------Conserver les data dans le champ du formulaire------
+// récupérer les data contact du localStorage
+function getContact() {
+    let contact = localStorage.getItem('Contact');
+    if (contact == null) {
+        return [];
+    } else {
+        // les transformer en objet js
+        return JSON.parse(contact);
+    }
+}
+// les afficher
+let contact = getContact();
+
+form.firstName.value = contact.prenom;
+form.lastName.value = contact.nom;
+form.address.value = contact.adresse;
+form.city.value = contact.ville;
+form.email.value = contact.email;
+
+
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (input) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        '^[a-z]{3,20}$','i'
+        '^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
     );
     //récupération de la balise p d'erreur
     let nextPrenom = input.nextElementSibling
@@ -181,7 +190,7 @@ const validNameCity = function (input) {
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '[\d]{0,3}[\s\w.,\']+','g'
+        '[\d]{0,3}[\s\w,.]+','g'
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
