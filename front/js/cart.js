@@ -97,22 +97,85 @@ for(let k of delete_btn) {
 }
 getTotals();
 /**************************************FORMULAIRE************************************** */
-
-
+let form = document.querySelector('.cart__order__form');
+// ecouter la modification du prenom 
+form.firstName.addEventListener('change', function(){
+    validNameCity(this);
+});
+// ecouter la modification du nom
+form.lastName.addEventListener('change', function(){
+    validNameCity(this)
+});
+// ecouter la modification de la ville
+form.city.addEventListener('change', function(){
+    validNameCity(this)
+});
+// ecouter la modification de l'adresse
+form.address.addEventListener('change', function(){
+    validAddress(this)
+});
+// ecouter la modification de l'email
+form.email.addEventListener('change', function(){
+    validEmail(this)
+});
+//--------Validation Prénom, Nom et Ville---------
+const validNameCity = function (input) {
+    // regex de validation du prénom, du nom et de la ville
+    let nameRegEx = new RegExp(
+        '^[a-z]{3,20}$','i'
+    );
+    // test de l'expression regulière
+    let testName = nameRegEx.test(input.value);
+    //récupération de la balise p d'erreur
+    let nextPrenom = input.nextElementSibling
+    // message d'erreur si le test est faux
+    if (testName == false) {
+        nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
+    }
+};
+//--------PB!!Validation Adresse---------
+const validAddress = function (input) {
+    // regex de validation de l'adresse
+    let addressRegEx = new RegExp(
+        '^[0-9]{3}\s[a-zA-Z]$','g'
+    );
+    // test de l'expression regulière
+    let testAddress = addressRegEx.test(input.value);
+    //récupération de la balise p d'erreur
+    let nextAddress = input.nextElementSibling
+    // message d'erreur si le test est faux
+    if (testAddress == false) {
+        nextAddress.textContent = "Veuillez rentrer une adresse valide";
+    }
+};
+//--------PB!!Validation Email---------
+const validEmail = function (input) {
+    // regex de validation de l'adresse
+    let emailRegEx = new RegExp(
+        '^[a-zA-A0-9.-_][@]{1}[a-zA-A0-9.-_][.]{1}[a-z]{2,15}$', 'g'
+    );
+    // test de l'expression regulière
+    let testEmail = emailRegEx.test(input.value);
+    //récupération de la balise p d'erreur
+    let nextEmail = input.nextElementSibling
+    // message d'erreur si le test est faux
+    if (testEmail == false) {
+        nextEmail.textContent = "Veuillez entrer un email valide";
+    }
+};
 // selection du bouton Commander 
 const orderBtn = document.querySelector('#order');
 // ecouter le bouton 
-orderBtn.addEventListener('click', (e) =>{
+orderBtn.addEventListener('submit', (e) =>{
     e.preventDefault();
-    
-   //récupérer les valeurs du formulaire
-   const Data = {
-       prenom : document.querySelector('#firstName').value,
-       nom : document.querySelector('#lastName').value,
-       adresse : document.querySelector('#address').value,
-       ville : document.querySelector('#city').value,
-       email : document.querySelector('#email').value
-   }
+    //récupérer les valeurs du formulaire
+    const Data = {
+        prenom : document.querySelector('#firstName').value,
+        nom : document.querySelector('#lastName').value,
+        adresse : document.querySelector('#address').value,
+        ville : document.querySelector('#city').value,
+        email : document.querySelector('#email').value
+    }
     console.log('formulaire Data :')
     console.log(Data);
     
@@ -120,19 +183,20 @@ orderBtn.addEventListener('click', (e) =>{
     localStorage.setItem('Contact', JSON.stringify(Data));
    
     // mettre basket et Data dans un objet à envoyer
-    const sendOrder = {
+    /*const sendOrder = {
         tabItems,
         Data
     }
     console.log("à envoyer :")
-    console.log(sendOrder)
+    console.log(sendOrder)*/
 
     // envoi de sendOrder vers le serveur:
 });  
 
+
 //------Conserver les data dans le champ du formulaire------
 // récupérer les data contact du localStorage
-function getContact() {
+/*function getContact() {
     let contact = localStorage.getItem('Contact');
     if (contact == null) {
         return [];
@@ -140,8 +204,8 @@ function getContact() {
         return JSON.parse(contact);
     }
 }
-//getContact();
-//console.log(getContact());
+getContact();
+console.log(getContact());
 let contact = getContact();
 console.log('contact :');
 console.log(contact);
@@ -150,7 +214,7 @@ document.querySelector('#firstName').value = contact.prenom;
 document.querySelector('#lastName').value = contact.nom;
 document.querySelector('#address').value = contact.adresse;
 document.querySelector('#city').value = contact.ville;
-document.querySelector('#email').value = contact.email;
+document.querySelector('#email').value = contact.email;*/
 
 
 
