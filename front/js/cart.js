@@ -125,10 +125,10 @@ form.addEventListener('submit', (e) =>{
     if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
         //récupérer les valeurs du formulaire
         Data = {
-            prenom : form.firstName.value,
-            nom : form.lastName.value,
-            adresse : form.address.value,
-            ville : form.city.value,
+            firstName : form.firstName.value,
+            lastName : form.lastName.value,
+            address : form.address.value,
+            city : form.city.value,
             email : form.email.value
         }
         console.log('formulaire Data :')
@@ -140,12 +140,30 @@ form.addEventListener('submit', (e) =>{
     localStorage.setItem('Contact', JSON.stringify(Data));
    
     //__________ mettre basket et Data dans un objet à envoyer________
-    const sendOrder = {
+    //console.log(tabItems);
+    for(product of tabItems) {
+        delete tabItems.option_produit;
+        delete tabItems.quantity;
+    } 
+     
+    /*const sendOrder = {
         tabItems,
         Data
     }
     console.log("à envoyer :")
-    console.log(sendOrder);
+    console.log(sendOrder);*/
+
+    //envoi de l'objet contenant produit et contact vers le serveur
+    const promiseOrder = fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        body: JSON.stringify(),
+
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+
+    });
+    console.log(promiseOrder);
 }); 
 
 
@@ -153,20 +171,17 @@ form.addEventListener('submit', (e) =>{
 // récupérer les data contact du localStorage
 function getContact() {
     let contact = localStorage.getItem('Contact');
-    if (contact == null) {
-        return [];
-    } else {
-        // les transformer en objet js
+    if (contact != null) {
         return JSON.parse(contact);
     }
-}
+};
 // les afficher
 let contact = getContact();
 
-form.firstName.value = contact.prenom;
-form.lastName.value = contact.nom;
-form.address.value = contact.adresse;
-form.city.value = contact.ville;
+form.firstName.value = contact.firstName;
+form.lastName.value = contact.lastName;
+form.address.value = contact.address;
+form.city.value = contact.city;
 form.email.value = contact.email;
 
 
