@@ -49,7 +49,7 @@ document.querySelector('#cart__items').innerHTML = carte;
 
 //modification du nombre d'items :
     //sélectionner tous les input number
-let inputNumber = document.querySelectorAll('input[type=number]');
+let inputNumber = document.querySelectorAll('input[type=number] .itemQuantity');
 //console.log(inputNumber);
 //boucle pour récupérer les modifications de quantité sur le panier
 for (let j of inputNumber) {
@@ -68,6 +68,7 @@ for (let j of inputNumber) {
         let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
         //console.log(changingArticle);
         // modifier la quantité dans le panier
+        let articlePrice = product.quantity * product.prix;
         cart.changeQuantity(changingArticle, newArticleQuantity);
         getTotals();
     }
@@ -165,7 +166,7 @@ form.addEventListener('submit', (e) =>{
     .then(data => {
         let reference = `${data.orderId}`;
         
-        document.querySelector('#orderId').textContent = reference;
+        //document.querySelector().textContent = reference;
     })
     .catch(err => console.log('Erreur : ' + err));
     
@@ -177,8 +178,7 @@ form.addEventListener('submit', (e) =>{
 function getContact() {
     let user = localStorage.getItem('Contact');
     if (user != null) {
-        return JSON.parse(user);
-        
+        return JSON.parse(user);   
     }
 };
 // les afficher
@@ -195,7 +195,9 @@ form.email.value = user.email;
 const validNameCity = function (input) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        '^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
+        //'^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
+        '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
+        //TODO ajouter un nombre minimum de caractères
     );
     //récupération de la balise p d'erreur
     let nextPrenom = input.nextElementSibling
@@ -211,7 +213,8 @@ const validNameCity = function (input) {
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '[\d]{0,3}[\s\w,.]+','g'
+        '[0-9]{0,4}[\s\w]+','g'
+        // TODO ajouter peut-etre des lettres en début ex 21A
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
@@ -227,7 +230,7 @@ const validAddress = function (input) {
 const validEmail = function (input) {
     // regex de validation de l'adresse
     let emailRegEx = new RegExp(
-        '^[a-zA-Z0-9\.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,15}$', 'g'
+        '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,15}$', 'g'
     );
     //récupération de la balise p d'erreur
     let nextEmail = input.nextElementSibling

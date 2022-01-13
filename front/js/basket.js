@@ -29,13 +29,15 @@ class Basket {
         this.save();
     }
     remove(product) {
+        // TODO tester si product est null ... console warn ou err , puis return 
         this.basket = this.basket.filter(p => p.id != product.id && p.option_produit != product.option_produit);
         this.save();
     }
     changeQuantity(product, quantity) {
+        //TODO tester si le product est null que faire : console.log product null
         let foundProduct = this.findProduct(product.id, product.option_produit);
         if (foundProduct != undefined) {
-            foundProduct.quantity = quantity;
+            foundProduct.quantity = parseInt(quantity);
             if (foundProduct.quantity < 1) {
                 this.remove(foundProduct);
             } else {
