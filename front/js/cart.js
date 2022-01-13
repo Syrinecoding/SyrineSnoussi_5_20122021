@@ -157,21 +157,7 @@ form.addEventListener('submit', (e) =>{
     console.log("à envoyer :")
     console.log(sendOrder);
 
- //-------envoi de l'objet contenant produit et contact vers le serveur--------
-    const promiseOrder = fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        body: JSON.stringify(sendOrder),
-        headers: {
-            'Content-Type' : 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        let reference = `${data.orderId}`;
-        window.location = `../html/confirmation.html?id=${data.orderId}`;
-        //confirmOrder()
-    })
-    .catch(err => console.log('Erreur : ' + err));
+    sendingOrder(sendOrder);
     
 }); 
 
@@ -256,3 +242,21 @@ const confirmOrder = () => {
     }
 }
 confirmOrder()
+
+const sendingOrder = (sendOrder) =>{
+    //-------envoi de l'objet contenant produit et contact vers le serveur--------
+    const promiseOrder = fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        body: JSON.stringify(sendOrder),
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        let reference = `${data.orderId}`;
+        window.location = `../html/confirmation.html?id=${data.orderId}`;
+        // confirmOrder()
+    })
+    .catch(err => console.log('Erreur : ' + err));
+}
