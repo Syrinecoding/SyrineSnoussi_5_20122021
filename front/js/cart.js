@@ -50,32 +50,25 @@ document.querySelector('#cart__items').innerHTML = carte;
 
 
 //modification du nombre d'items :
-    //sélectionner tous les input number
+//sélectionner tous les input number
 let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
-//console.log(inputNumber);
 //boucle pour récupérer les modifications de quantité sur le panier
 for (let j of inputNumber) {
     j.addEventListener('change', (event) => {
-        // récupérer la nouvelle valeur:
+    // récupérer la nouvelle valeur:
         let newArticleQuantity = event.target.value;
-        //console.log(newArticleQuantity);
-        //récupérer l'id et la couleur de l'article modifié
+    //récupérer l'id et la couleur de l'article modifié
         let changedArticle = j.closest(".cart__item");
-        //console.log(changedArticle);
         let changedArticleId = changedArticle.dataset.id;
-        //console.log(changedArticleId);
         let changedArticleColor = changedArticle.dataset.color;
-        //console.log(changedArticleColor);
-        //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
+    //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
         let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
-        //console.log(changingArticle);
-        // modifier la quantité dans le panier
+    // modifier la quantité dans le panier
         cart.changeQuantity(changingArticle, newArticleQuantity);
         getTotals();
         location.reload(true);
     }
     );
-    
 }
 
 // suppression d'un article du panier
@@ -83,17 +76,14 @@ let delete_btn = document.querySelectorAll('.deleteItem');
 for(let k of delete_btn) {
     k.addEventListener('click', () => {
         let itemToDelete = k.closest(".cart__item");
-        //console.log(itemToDelete);
-        //récupérer son id et sa couleur :
+    //récupérer son id et sa couleur :
         let idToDelete = itemToDelete.dataset.id;
         let colorToDelete = itemToDelete.dataset.color;
-        //console.log(idToDelete + ' ' + colorToDelete);
-        // trouver la référence de l'article à supprimer
+    // trouver la référence de l'article à supprimer
         let removingItem = cart.findProduct(idToDelete, colorToDelete);
-        //console.log(removingItem);
-        //supprimer l'article du panier
+    //supprimer l'article du panier
         cart.remove(removingItem);
-        // supprimer l'article du DOM
+    // supprimer l'article du DOM
         if (cart.length > 0){
             document.querySelector('#cart__items').removeChild(itemToDelete);
         } else {
@@ -147,22 +137,13 @@ form.addEventListener('submit', (e) =>{
     // les mettre dans le localStorage
     localStorage.setItem('Contact', JSON.stringify(contact));
    
-    //__________ mettre products et contact dans un objet à envoyer________
-    //console.log(tabItems);
-     
+    //__________ mettre products et contact dans un objet à envoyer________ 
     const sendOrder = {
         contact,
         products    
     }
-    console.log("à envoyer :")
-    console.log(sendOrder);
-
     sendingOrder(sendOrder);
-    
 }); 
-
-
-
 
 //------Conserver les data dans le champ du formulaire------
 // récupérer les data contact du localStorage
@@ -179,8 +160,6 @@ form.lastName.value = user.lastName;
 form.address.value = user.address;
 form.city.value = user.city;
 form.email.value = user.email;
-
-
 
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (input) {
