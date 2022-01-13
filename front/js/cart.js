@@ -13,6 +13,8 @@ const getTotals = () => {
     let totalPrice = document.querySelector('#totalPrice');
     totalPrice.innerHTML = cart.getTotalPrice();
 }
+
+
 let products = [];
 // affichage des produits dans le panier :
 // pb : articlePrice ne se met à jour qu'au rechargement de la page.
@@ -49,7 +51,7 @@ document.querySelector('#cart__items').innerHTML = carte;
 
 //modification du nombre d'items :
     //sélectionner tous les input number
-let inputNumber = document.querySelectorAll('input[type=number] .itemQuantity');
+let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
 //console.log(inputNumber);
 //boucle pour récupérer les modifications de quantité sur le panier
 for (let j of inputNumber) {
@@ -68,11 +70,12 @@ for (let j of inputNumber) {
         let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
         //console.log(changingArticle);
         // modifier la quantité dans le panier
-        let articlePrice = product.quantity * product.prix;
         cart.changeQuantity(changingArticle, newArticleQuantity);
         getTotals();
+        location.reload(true);
     }
     );
+    
 }
 
 // suppression d'un article du panier
@@ -154,7 +157,7 @@ form.addEventListener('submit', (e) =>{
     console.log("à envoyer :")
     console.log(sendOrder);
 
-    //envoi de l'objet contenant produit et contact vers le serveur
+ //-------envoi de l'objet contenant produit et contact vers le serveur--------
     const promiseOrder = fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
         body: JSON.stringify(sendOrder),
@@ -165,12 +168,14 @@ form.addEventListener('submit', (e) =>{
     .then(response => response.json())
     .then(data => {
         let reference = `${data.orderId}`;
-        
-        //document.querySelector().textContent = reference;
+        window.location = `../html/confirmation.html?id=${data.orderId}`;
+        //confirmOrder()
     })
     .catch(err => console.log('Erreur : ' + err));
     
 }); 
+
+
 
 
 //------Conserver les data dans le champ du formulaire------
@@ -228,7 +233,7 @@ const validAddress = function (input) {
 };
 //--------Validation Email---------
 const validEmail = function (input) {
-    // regex de validation de l'adresse
+    // regex de validation de l'adresse mail
     let emailRegEx = new RegExp(
         '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,15}$', 'g'
     );
@@ -242,3 +247,12 @@ const validEmail = function (input) {
         return false;
     }
 };
+const orderedId = new URL(window.location.href).searchParams.get('id');
+        
+const confirmOrder = () => {
+    let idOrder = document.querySelector('#orderId')
+    if (document.URL.includes('confirmation.html')) {
+        idOrder.innerHTML = orderedId;
+    }
+}
+confirmOrder()

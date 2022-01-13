@@ -73,7 +73,7 @@ class Basket {
 
 let cart = new Basket();
 //console.log(cart);
-// jester pour tester
+// TODO jester pour tester
 
 
 
