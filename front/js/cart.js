@@ -13,9 +13,13 @@ const getTotals = () => {
     let totalPrice = document.querySelector('#totalPrice');
     totalPrice.innerHTML = cart.getTotalPrice();
 }
+let products = [];
 // affichage des produits dans le panier :
 // pb : articlePrice ne se met à jour qu'au rechargement de la page.
 for (let product of tabItems) {
+    let productsId = [product.id];
+    products.push(productsId);
+    console.log(products);
     let articlePrice = product.quantity * product.prix;
     carte += 
         `<article class="cart__item" data-id="${product.id}" data-color="${product.option_produit}">
@@ -124,65 +128,67 @@ form.addEventListener('submit', (e) =>{
     e.preventDefault();
     if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
         //récupérer les valeurs du formulaire
-        Data = {
+        contact = {
             firstName : form.firstName.value,
             lastName : form.lastName.value,
             address : form.address.value,
             city : form.city.value,
             email : form.email.value
         }
-        console.log('formulaire Data :')
-        console.log(Data);
+        console.log('formulaire contact :')
+        console.log(contact);
     } else {
         return false;
     }
     // les mettre dans le localStorage
-    localStorage.setItem('Contact', JSON.stringify(Data));
+    localStorage.setItem('Contact', JSON.stringify(contact));
    
-    //__________ mettre basket et Data dans un objet à envoyer________
+    //__________ mettre products et contact dans un objet à envoyer________
     //console.log(tabItems);
-    for(product of tabItems) {
-        delete tabItems.option_produit;
-        delete tabItems.quantity;
-    } 
      
-    /*const sendOrder = {
-        tabItems,
-        Data
+    const sendOrder = {
+        contact,
+        products    
     }
     console.log("à envoyer :")
-    console.log(sendOrder);*/
+    console.log(sendOrder);
 
     //envoi de l'objet contenant produit et contact vers le serveur
     const promiseOrder = fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
-        body: JSON.stringify(),
-
+        body: JSON.stringify(sendOrder),
         headers: {
             'Content-Type' : 'application/json',
         },
-
-    });
-    console.log(promiseOrder);
+    })
+    .then(response => response.json())
+    .then(data => {
+        let reference = `${data.orderId}`;
+        
+        document.querySelector('#orderId').textContent = reference;
+    })
+    .catch(err => console.log('Erreur : ' + err));
+    
 }); 
 
 
 //------Conserver les data dans le champ du formulaire------
 // récupérer les data contact du localStorage
 function getContact() {
-    let contact = localStorage.getItem('Contact');
-    if (contact != null) {
-        return JSON.parse(contact);
+    let user = localStorage.getItem('Contact');
+    if (user != null) {
+        return JSON.parse(user);
+        
     }
 };
 // les afficher
-let contact = getContact();
+let user = getContact();
+form.firstName.value = user.firstName;
+form.lastName.value = user.lastName;
+form.address.value = user.address;
+form.city.value = user.city;
+form.email.value = user.email;
 
-form.firstName.value = contact.firstName;
-form.lastName.value = contact.lastName;
-form.address.value = contact.address;
-form.city.value = contact.city;
-form.email.value = contact.email;
 
 
 //--------Validation Prénom, Nom et Ville---------
