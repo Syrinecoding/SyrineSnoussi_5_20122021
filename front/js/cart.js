@@ -1,5 +1,5 @@
 //récupérer le panier du localStorage
-let carte = '';
+
 const tabItems = cart.basket;
 console.log('basket tabItems:')
 console.log(tabItems);
@@ -14,7 +14,7 @@ const getTotals = () => {
     totalPrice.innerHTML = cart.getTotalPrice();
 }
 
-
+let carte = '';
 let products = [];
 // affichage des produits dans le panier :
 // pb : articlePrice ne se met à jour qu'au rechargement de la page.
@@ -142,7 +142,9 @@ form.addEventListener('submit', (e) =>{
         contact,
         products    
     }
+    //appel de la fonction POST
     sendingOrder(sendOrder);
+    
 }); 
 
 //------Conserver les data dans le champ du formulaire------
@@ -165,26 +167,27 @@ form.email.value = user.email;
 const validNameCity = function (input) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        //'^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
-        '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
-        //TODO ajouter un nombre minimum de caractères
+        '^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
+        //'^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
     );
     //récupération de la balise p d'erreur
     let nextPrenom = input.nextElementSibling
     // test de l'expression regulière
-    if (nameRegEx.test(input.value)) {
-        return true;
-    }else{
+    if(input.value.length < 3 || input.value.length > 20) {
         nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
         return false;
-    }
+    } else if (!nameRegEx.test(input.value)) {
+        nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
+        return false;
+    } else if (nameRegEx.test(input.value)) {
+        return true;
+    }    
 };
 //--------PB!!Validation Adresse---------
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '[0-9]{0,4}[\s\w]+','g'
-        // TODO ajouter peut-etre des lettres en début ex 21A
+        '[0-9-a-zA-Z\s, ]*','g'
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
@@ -212,15 +215,7 @@ const validEmail = function (input) {
         return false;
     }
 };
-const orderedId = new URL(window.location.href).searchParams.get('id');
-        
-const confirmOrder = () => {
-    let idOrder = document.querySelector('#orderId')
-    if (document.URL.includes('confirmation.html')) {
-        idOrder.innerHTML = orderedId;
-    }
-}
-confirmOrder()
+
 
 const sendingOrder = (sendOrder) =>{
     //-------envoi de l'objet contenant produit et contact vers le serveur--------
@@ -228,14 +223,13 @@ const sendingOrder = (sendOrder) =>{
         method: 'POST',
         body: JSON.stringify(sendOrder),
         headers: {
-            'Content-Type' : 'application/json',
+        'Content-Type' : 'application/json',
         },
     })
     .then(response => response.json())
     .then(data => {
         let reference = `${data.orderId}`;
         window.location = `../html/confirmation.html?id=${data.orderId}`;
-        // confirmOrder()
     })
     .catch(err => console.log('Erreur : ' + err));
-}
+};
