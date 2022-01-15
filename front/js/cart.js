@@ -63,19 +63,9 @@ function initDivImage() {
 
     let imgDivItem = dom_utils.creatEl({
         className: 'cart__item__img',
+        innerHTML: `<img src=" " alt=" ">`
     });
     parent.appendChild(imgDivItem);
-}
-function initImg() {
-    let parent = document.querySelector('.cart__item__img');
-    let imgItem =dom_utils.creatEl({
-        type: 'img',
-        attrs:{
-            src: ``,
-            alt: ``,
-        }
-    });
-    parent.appendChild(imgItem);
 }
 function initDivContent() {
     let imageItem = document.querySelector('.cart__item__img');
@@ -87,7 +77,8 @@ function initDivContent() {
 function initDescription() {
     let parent = document.querySelector('.cart__item__content');
     let itemDesc = dom_utils.creatEl({
-        className: '.cart__item__content__description',
+        className: 'cart__item__content__description',
+        innerHTML: `<h2></h2>\n<p></p>\n<p> €</p>`
     });
     parent.append(itemDesc);
 }
@@ -95,26 +86,52 @@ function initSettings() {
     let parent = document.querySelector('.cart__item__content');
 
     let itemSettings = dom_utils.creatEl({
-        className: '.cart__item__content__settings',
+        className: 'cart__item__content__settings',
     });
     parent.insertAdjacentElement('beforeend', itemSettings);
 };
 function initsetQuantity() {
     let parent= document.querySelector('.cart__item__content__settings');
-    console.log(parent);
+    
     let itemSetQuantity = dom_utils.creatEl({
-        className: '.cart__item__content__settings__quantity',
+        className: 'cart__item__content__settings__quantity',
+        innerHTML: `<p>Qté : </p>`,
     });
     parent.appendChild(itemSetQuantity);
 };
-
+function initInputQty() {
+    let parent= document.querySelector('.cart__item__content__settings__quantity');
+    
+    let itemInputQuantity = dom_utils.creatEl({
+        type: 'input',
+        className: 'itemQuantity',
+        attrs:{
+            type: 'number',
+            name: 'itemQuantity',
+            min: '1',
+            max: '100',
+            value: '1',
+        }
+    });
+    parent.appendChild(itemInputQuantity);
+};
+function initSetDelete() {
+    let parent= document.querySelector('.cart__item__content__settings');
+    
+    let itemSetDelete = dom_utils.creatEl({
+        className: 'cart__item__content__settings__delete',
+        innerHTML: '<p class="deleteItem">Supprimer</p>',
+    });
+    parent.appendChild(itemSetDelete);
+};
 initArticle();
 initDivImage();
-initImg();
 initDivContent();
 initDescription();
 initSettings();
 initsetQuantity();
+initInputQty();
+initSetDelete();
 
 // // affichage et calcul du total des articles et de la somme totale :
 // const getTotals = () => {
