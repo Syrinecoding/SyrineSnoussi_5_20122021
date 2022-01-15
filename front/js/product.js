@@ -1,10 +1,7 @@
 // récupérer la chaine de l'url
-const queryUrl= window.location.href;
-//console.log(queryUrl);
-
+const queryUrl = window.location.href;
 //extraire l'id
 const url = new URL(queryUrl);
-//console.log(url);
 const id = url.searchParams.get('id');
 //console.log(id);
 
@@ -39,7 +36,7 @@ promiseProduct
     }
     document.querySelector('#colors').innerHTML = document.querySelector('#colors').innerHTML + affichageCol;
 
-            // **** gestion de la sélection de l'utilisateur ****
+    // **** gestion de la sélection de l'utilisateur ****
     const btn_addBasket = document.querySelector('#addToCart');
     //Ecouter le bouton et empêcher reactualisation de la page au click
     btn_addBasket.addEventListener('click', (event)=> {

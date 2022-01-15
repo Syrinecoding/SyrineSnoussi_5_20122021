@@ -4,6 +4,112 @@ const tabItems = cart.basket;
 console.log('basket tabItems:')
 console.log(tabItems);
 
+let products = [];
+let articlePrice;
+function loopCart () {
+    for(let product of tabItems) {
+        const pId = product.id;
+        const pColor = product.option_produit;
+        const pImg = product.image;
+        const pAlt = product.texteAlt;
+        const pName = product.nom;
+        const pQuantity = product.quantity;
+        const pPrice = product.prix;
+        let productsId = [product.id];
+        products.push(productsId);
+    }
+    articlePrice = pQuantity * pPrice;
+}
+
+let dom_utils = {};
+(function(context){
+    // objet avec propriétés d'un élément
+    context.creatEl = function(o) {
+        let type = o.type ||'div';
+        let el = document.createElement(type);
+            for(const key of (Object.keys(o))) {
+                if(key != 'attrs' && key != 'type') {
+                    el[key] = o[key];
+                }
+            }
+            if(o.attrs) {
+                for(let key of (Object.keys(o.attrs))) {
+                    let value = o.attrs[key];
+                    if(key != key.toLowerCase()) {
+                        key = key.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+                    }
+                    el.setAttribute(key, value);
+                }
+            }
+            return el;    
+    };
+    
+})(dom_utils);
+
+function initArticle() {
+    let parent = document.querySelector('#cart__items');
+
+    let articleItem = dom_utils.creatEl({
+        type: 'article',
+        className: 'cart__item',
+        attrs:{
+            dataId: `{pId}`,
+            dataColor: `{pColor}`,
+        }
+    });
+    parent.appendChild(articleItem);
+};
+function initDivImage() {
+    let parent = document.querySelector('.cart__item');
+
+    let imgDivItem = dom_utils.creatEl({
+        className: 'cart__item__img',
+    });
+    parent.appendChild(imgDivItem);
+};
+function initImg() {
+    let parent = document.querySelector('.cart__item__img');
+    let imgItem =dom_utils.creatEl({
+        type: 'img',
+        attrs:{
+            src: `{pImg}`,
+            alt: `{pAlt}`,
+        }
+    });
+    parent.appendChild(imgItem);
+};
+function initDivContent() {
+    let imageItem = document.querySelector('.cart__item__img');
+    let divContent = dom_utils.creatEl({
+        className: 'cart__item__content',
+    });
+    imageItem.insertAdjacentElement('beforeend', divContent);
+};
+function initDescription() {
+    let parent = document.querySelector('.cart__item__content');
+    let itemDesc = dom_utils.creatEl({
+        className: '.cart__item__content__description',
+    });
+    parent.appendChild(itemDesc);
+};
+function initSettings() {
+    let parent = document.querySelector('.cart__item__content');
+    let itemSettings = dom_utils.creatEl({
+        className: '.cart__item__content__settings',
+    });
+    parent.insertAdjacentElement('beforeend', itemSettings);
+};
+
+
+initArticle();
+initDivImage();
+initImg();
+initDivContent();
+initDescription();
+initSettings();
+
+
+/*
 // affichage et calcul du total des articles et de la somme totale :
 const getTotals = () => {
     
@@ -47,8 +153,8 @@ for (let product of tabItems) {
     </article>`;
 }
 document.querySelector('#cart__items').innerHTML = carte;
-
-
+*/
+/*
 //modification du nombre d'items :
 //sélectionner tous les input number
 let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
@@ -95,7 +201,7 @@ for(let k of delete_btn) {
 }
 getTotals();
 
-/**************************************FORMULAIRE************************************** */
+/**************************************FORMULAIRE************************************** 
 let form = document.querySelector('.cart__order__form');
 // ecouter la modification du prenom 
 form.firstName.addEventListener('change', function(){
@@ -216,7 +322,6 @@ const validEmail = function (input) {
     }
 };
 
-
 const sendingOrder = (sendOrder) =>{
     //-------envoi de l'objet contenant produit et contact vers le serveur--------
     const promiseOrder = fetch('http://localhost:3000/api/products/order', {
@@ -233,3 +338,4 @@ const sendingOrder = (sendOrder) =>{
     })
     .catch(err => console.log('Erreur : ' + err));
 };
+*/
