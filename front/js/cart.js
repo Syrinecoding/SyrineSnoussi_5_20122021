@@ -101,9 +101,9 @@ function initSettings() {
 };
 function initsetQuantity() {
     let parent= document.querySelector('.cart__item__content__settings');
-
+    console.log(parent);
     let itemSetQuantity = dom_utils.creatEl({
-        className: '.cart__item__ content__settings__quantity',
+        className: '.cart__item__content__settings__quantity',
     });
     parent.appendChild(itemSetQuantity);
 };
