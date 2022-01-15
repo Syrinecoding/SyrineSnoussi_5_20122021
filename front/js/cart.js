@@ -57,7 +57,7 @@ function initArticle() {
         }
     });
     parent.appendChild(articleItem);
-};
+}
 function initDivImage() {
     let parent = document.querySelector('.cart__item');
 
@@ -65,40 +65,48 @@ function initDivImage() {
         className: 'cart__item__img',
     });
     parent.appendChild(imgDivItem);
-};
+}
 function initImg() {
     let parent = document.querySelector('.cart__item__img');
     let imgItem =dom_utils.creatEl({
         type: 'img',
         attrs:{
-            src: `{pImg}`,
-            alt: `{pAlt}`,
+            src: ``,
+            alt: ``,
         }
     });
     parent.appendChild(imgItem);
-};
+}
 function initDivContent() {
     let imageItem = document.querySelector('.cart__item__img');
     let divContent = dom_utils.creatEl({
         className: 'cart__item__content',
     });
     imageItem.insertAdjacentElement('beforeend', divContent);
-};
+}
 function initDescription() {
     let parent = document.querySelector('.cart__item__content');
     let itemDesc = dom_utils.creatEl({
         className: '.cart__item__content__description',
     });
-    parent.appendChild(itemDesc);
-};
+    parent.append(itemDesc);
+}
 function initSettings() {
     let parent = document.querySelector('.cart__item__content');
+
     let itemSettings = dom_utils.creatEl({
         className: '.cart__item__content__settings',
     });
     parent.insertAdjacentElement('beforeend', itemSettings);
 };
+function initsetQuantity() {
+    let parent= document.querySelector('.cart__item__content__settings');
 
+    let itemSetQuantity = dom_utils.creatEl({
+        className: '.cart__item__ content__settings__quantity',
+    });
+    parent.appendChild(itemSetQuantity);
+};
 
 initArticle();
 initDivImage();
@@ -106,6 +114,7 @@ initImg();
 initDivContent();
 initDescription();
 initSettings();
+initsetQuantity();
 
 // // affichage et calcul du total des articles et de la somme totale :
 // const getTotals = () => {
