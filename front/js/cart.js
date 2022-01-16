@@ -1,23 +1,24 @@
-//récupérer le panier du localStorage
-
 const tabItems = cart.basket;
-console.log('basket tabItems:')
-console.log(tabItems);
-let products = [];
-let articlePrice;
-function loopCart () {
-    for(let product of tabItems) {
-        const pId = product.id;
-        const pColor = product.option_produit;
-        const pImg = product.image;
-        const pAlt = product.texteAlt;
-        const pName = product.nom;
-        const pQuantity = product.quantity;
-        const pPrice = product.prix;
-        let productsId = [product.id];
-        products.push(productsId);
-    }
-    articlePrice = pQuantity * pPrice;
+// afficher les produits du panier
+
+console.log("Affichage panier");
+    // tableau pour récupérer les id des produits
+let products = new Array();
+    /* POKKA pourquoi new Array () ? */
+    
+    
+    // boucle pour récupérer les valeurs des produits du panier
+for(let p of tabItems) {
+    products.push(p.id);
+    console.log("products")
+    console.log(products)
+    fetch('http://localhost:3000/api/products/'+ p.id)
+    .then(response => response.json())
+    .then(product =>{
+        console.log(product)
+        //cartItem(product, p);
+    });
+     
 }
 
 let dom_utils = {};
@@ -44,31 +45,32 @@ let dom_utils = {};
     };
     
 })(dom_utils);
+//générer le code d'un article du panier 
 
-function initArticle() {
+function initArticle(product, p) {
     let parent = document.querySelector('#cart__items');
 
     let articleItem = dom_utils.creatEl({
         type: 'article',
         className: 'cart__item',
         attrs:{
-            dataId: `{pId}`,
-            dataColor: `{pColor}`,
+            dataId: `?`,
+            dataColor: `?`,
         }
     });
     parent.appendChild(articleItem);
 }
-function initDivImage() {
+function initDivImage(product, p) {
     let parent = document.querySelector('.cart__item');
 
     let imgDivItem = dom_utils.creatEl({
         className: 'cart__item__img',
-        innerHTML: `<img src=" " alt=" ">`
+        innerHTML: `<img src=" ?" alt=" ">`
     });
     parent.appendChild(imgDivItem);
 }
 function initDivContent() {
-    let imageItem = document.querySelector('.cart__item__img');
+    let imageItem = document.querySelector('.cart__item');
     let divContent = dom_utils.creatEl({
         className: 'cart__item__content',
     });
@@ -78,7 +80,7 @@ function initDescription() {
     let parent = document.querySelector('.cart__item__content');
     let itemDesc = dom_utils.creatEl({
         className: 'cart__item__content__description',
-        innerHTML: `<h2></h2>\n<p></p>\n<p> €</p>`
+        innerHTML: `<h2>?</h2>\n<p>?</p>\n<p> ?€</p>`
     });
     parent.append(itemDesc);
 }
@@ -95,7 +97,7 @@ function initsetQuantity() {
     
     let itemSetQuantity = dom_utils.creatEl({
         className: 'cart__item__content__settings__quantity',
-        innerHTML: `<p>Qté : </p>`,
+        innerHTML: `<p>Qté : ?</p>`,
     });
     parent.appendChild(itemSetQuantity);
 };
@@ -110,7 +112,7 @@ function initInputQty() {
             name: 'itemQuantity',
             min: '1',
             max: '100',
-            value: '1',
+            value: '?',
         }
     });
     parent.appendChild(itemInputQuantity);
@@ -132,6 +134,7 @@ initSettings();
 initsetQuantity();
 initInputQty();
 initSetDelete();
+
 
 // // affichage et calcul du total des articles et de la somme totale :
 // const getTotals = () => {
