@@ -1,22 +1,16 @@
 // gérer l'affichage du panier et de la page confirmation
 let queryActualUrl = window.location.href
-let urlToDisplay = queryActualUrl.split('/')
 
-if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
-    displayConfirmation()
-}else{
-    displayCart()
-}
 
 // variable contenu du localStorage
 const tabItems = cart.basket;
-
+ // tableau pour récupérer les id des produits
+ let products = new Array();
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
-    // tableau pour récupérer les id des produits
-    let products = new Array();
-    
+   
+    //TODO mettre le fetch hors de la boucle ?
     // boucle pour récupérer les valeurs des produits du panier
     for(let p of tabItems) {
         products.push(p.id);
@@ -32,38 +26,7 @@ displayCart = () => {
         
             displayCartItem(product, p);
         });
-    }
-    // ecouter le bouton commander
-    form.addEventListener('submit', (e) =>{
-        e.preventDefault();
-        if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
-            //récupérer les valeurs du formulaire
-            contact = {
-                firstName : form.firstName.value,
-                lastName : form.lastName.value,
-                address : form.address.value,
-                city : form.city.value,
-                email : form.email.value
-            }
-            console.log('formulaire contact :')
-            console.log(contact);
-        } else {
-            return false;
-        }
-        // les mettre dans le localStorage
-        localStorage.setItem('Contact', JSON.stringify(contact));
-    
-        //__________ mettre products et contact dans un objet à envoyer________ 
-        const sendOrder = {
-            contact,
-            products    
-        }
-        //appel de la fonction POST
-        sendingOrder(sendOrder);
-        
-    }); 
-
-    
+    }    
 }
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -211,50 +174,55 @@ const getTotals = () => {
 }
 
 // //modification du nombre d'items :
-// //sélectionner tous les input number
-let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
-//boucle pour récupérer les modifications de quantité sur le panier
-for (let j of inputNumber) {
-    j.addEventListener('change', (event) => {
-    // récupérer la nouvelle valeur:
-        let newArticleQuantity = event.target.value;
-    //récupérer l'id et la couleur de l'article modifié
-        let changedArticle = j.closest(".cart__item");
-        let changedArticleId = changedArticle.dataset.id;
-        let changedArticleColor = changedArticle.dataset.color;
-    //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
-        let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
-    // modifier la quantité dans le panier
-        cart.changeQuantity(changingArticle, newArticleQuantity);
-        getTotals();
-        location.reload(true);
+const listenInputQuantity = () => {
+    // //sélectionner tous les input number
+    let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
+    //boucle pour récupérer les modifications de quantité sur le panier
+    for (let j of inputNumber) {
+        j.addEventListener('change', (event) => {
+        // récupérer la nouvelle valeur:
+            let newArticleQuantity = event.target.value;
+        //récupérer l'id et la couleur de l'article modifié
+            let changedArticle = j.closest(".cart__item");
+            let changedArticleId = changedArticle.dataset.id;
+            let changedArticleColor = changedArticle.dataset.color;
+        //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
+            let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
+        // modifier la quantité dans le panier
+            cart.changeQuantity(changingArticle, newArticleQuantity);
+            getTotals();
+            location.reload(true);
+        });
     }
-    );
 }
+listenInputQuantity();
 
 // suppression d'un article du panier
-let delete_btn = document.querySelectorAll('.deleteItem');
-for(let k of delete_btn) {
-    k.addEventListener('click', () => {
-        let itemToDelete = k.closest(".cart__item");
-    //récupérer son id et sa couleur :
-        let idToDelete = itemToDelete.dataset.id;
-        let colorToDelete = itemToDelete.dataset.color;
-    // trouver la référence de l'article à supprimer
-        let removingItem = cart.findProduct(idToDelete, colorToDelete);
-    //supprimer l'article du panier
-        cart.remove(removingItem);
-    // supprimer l'article du DOM
-        if (cart.length > 0){
-            document.querySelector('#cart__items').removeChild(itemToDelete);
-        } else {
-            let sectionArticles = document.querySelector('#cart__items');
-            sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
-        }
-        getTotals();
-    });
+const listenDelete = () => {
+    let delete_btn = document.querySelectorAll('.deleteItem');
+    for(let k of delete_btn) {
+        k.addEventListener('click', () => {
+            let itemToDelete = k.closest(".cart__item");
+        //récupérer son id et sa couleur :
+            let idToDelete = itemToDelete.dataset.id;
+            let colorToDelete = itemToDelete.dataset.color;
+        // trouver la référence de l'article à supprimer
+            let removingItem = cart.findProduct(idToDelete, colorToDelete);
+        //supprimer l'article du panier
+            cart.remove(removingItem);
+        // supprimer l'article du DOM
+            if (cart.length > 0){
+                document.querySelector('#cart__items').removeChild(itemToDelete);
+            } else {
+                let sectionArticles = document.querySelector('#cart__items');
+                sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
+            }
+            getTotals();
+        });
+    }
 }
-getTotals();
+listenDelete();
+
 
 /**************************************FORMULAIRE************************************** */
 let form = document.querySelector('.cart__order__form');
@@ -278,7 +246,33 @@ form.address.addEventListener('change', function(){
 form.email.addEventListener('change', function(){
     validEmail(this)
 });
+// ecouter le bouton commander
+form.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
+        //récupérer les valeurs du formulaire
+        contact = {
+            firstName : form.firstName.value,
+            lastName : form.lastName.value,
+            address : form.address.value,
+            city : form.city.value,
+            email : form.email.value
+        }
+        console.log('formulaire contact :')
+        console.log(contact);
+    } 
+    // les mettre dans le localStorage
+    localStorage.setItem('Contact', JSON.stringify(contact));
 
+    //__________ mettre products et contact dans un objet à envoyer________ 
+    const sendOrder = {
+        contact,
+        products    
+    }
+    //appel de la fonction POST
+    sendingOrder(sendOrder);
+    
+}); 
 
 //------Conserver les data dans le champ du formulaire------
 // récupérer les data contact du localStorage
@@ -312,9 +306,8 @@ const validNameCity = function (input) {
     } else if (!nameRegEx.test(input.value)) {
         nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
         return false;
-    } else if (nameRegEx.test(input.value)) {
-        return true;
-    }    
+    }
+    return true;   
 };
 //--------PB!!Validation Adresse---------
 const validAddress = function (input) {
@@ -361,8 +354,24 @@ const sendingOrder = (sendOrder) =>{
     })
     .then(response => response.json())
     .then(data => {
-        let reference = `${data.orderId}`;
+        //let reference = `${data.orderId}`;
         window.location = `../html/confirmation.html?id=${data.orderId}`;
     })
     .catch(err => console.log('Erreur : ' + err));
 };
+
+const orderedId = new URL(window.location.href).searchParams.get('id');  
+      
+const displayConfirmation = () => {
+    const idOrderSpan = document.querySelector('#orderId')
+    
+    console.log(orderedId)
+    idOrderSpan.innerHTML = orderedId;  
+}
+
+let urlToDisplay = queryActualUrl.split('/')
+if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
+    displayConfirmation()
+}else{
+    displayCart()
+}
