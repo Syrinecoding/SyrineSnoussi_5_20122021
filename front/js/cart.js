@@ -1,11 +1,14 @@
+// gérer l'affichage du panier et de la page confirmation
 let queryActualUrl = window.location.href
 let urlToDisplay = queryActualUrl.split('/')
 
 if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
-
+    displayConfirmation()
 }else{
     displayCart()
 }
+
+// variable contenu du localStorage
 const tabItems = cart.basket;
 
 // afficher les produits du panier
@@ -30,9 +33,40 @@ displayCart = () => {
             displayCartItem(product, p);
         });
     }
+    // ecouter le bouton commander
+    form.addEventListener('submit', (e) =>{
+        e.preventDefault();
+        if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
+            //récupérer les valeurs du formulaire
+            contact = {
+                firstName : form.firstName.value,
+                lastName : form.lastName.value,
+                address : form.address.value,
+                city : form.city.value,
+                email : form.email.value
+            }
+            console.log('formulaire contact :')
+            console.log(contact);
+        } else {
+            return false;
+        }
+        // les mettre dans le localStorage
+        localStorage.setItem('Contact', JSON.stringify(contact));
+    
+        //__________ mettre products et contact dans un objet à envoyer________ 
+        const sendOrder = {
+            contact,
+            products    
+        }
+        //appel de la fonction POST
+        sendingOrder(sendOrder);
+        
+    }); 
+
+    
 }
 
-
+// fonction pour générer les éléments du DOM à ajouter
 let dom_utils = {};
 (function(context){
     // objet avec propriétés d'un élément
@@ -57,7 +91,9 @@ let dom_utils = {};
     };
     
 })(dom_utils);
+
 //générer le code d'un article du panier 
+    // la balise article
 displayCartItem = (product, p) => {
     function initArticle(p) {
         let parent = document.querySelector('#cart__items');
@@ -67,11 +103,12 @@ displayCartItem = (product, p) => {
             className: 'cart__item',
             attrs:{
                 dataId: p.id,
-                dataColor: p.color,
+                dataColor: p.option_produit,
             }
         });
         parent.appendChild(articleItem);
     }
+    //la div img
     function initDivImage(product) {
         let parents = document.querySelectorAll('.cart__item');
         let last = parents[parents.length -1]
@@ -82,6 +119,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(imgDivItem);
     }
+    // la div content
     function initDivContent() {
         let imageItems = document.querySelectorAll('.cart__item');
         let last = imageItems[imageItems.length -1]
@@ -90,6 +128,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(divContent);
     }
+    // la div description
     function initDescription(p, product) {
         let parents = document.querySelectorAll('.cart__item__content');
         let last = parents[parents.length -1]
@@ -100,6 +139,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(itemDesc);
     }
+    // la div settings
     function initSettings() {
         let parents = document.querySelectorAll('.cart__item__content');
         let last = parents[parents.length -1]
@@ -109,6 +149,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(itemSettings);
     };
+    // la div quantity
     function initsetQuantity(p) {
         let parents = document.querySelectorAll('.cart__item__content__settings');
         let last = parents[parents.length -1]
@@ -119,6 +160,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(itemSetQuantity);
     };
+    // l'input itemQuantity
     function initInputQty(p) {
         let parents = document.querySelectorAll('.cart__item__content__settings__quantity');
         let last = parents[parents.length -1]
@@ -135,6 +177,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(itemInputQuantity);
     };
+    // la div delete 
     function initSetDelete(p) {
         let parents = document.querySelectorAll('.cart__item__content__settings');
         let last = parents[parents.length -1]
@@ -144,6 +187,7 @@ displayCartItem = (product, p) => {
         });
         last.appendChild(itemSetDelete);
     };
+    // appel de toutes les balises de l'article
     initArticle(p);
     initDivImage(product);
     initDivContent();
@@ -234,35 +278,7 @@ form.address.addEventListener('change', function(){
 form.email.addEventListener('change', function(){
     validEmail(this)
 });
-// ecouter le bouton commander
-form.addEventListener('submit', (e) =>{
-    e.preventDefault();
-    if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
-        //récupérer les valeurs du formulaire
-        contact = {
-            firstName : form.firstName.value,
-            lastName : form.lastName.value,
-            address : form.address.value,
-            city : form.city.value,
-            email : form.email.value
-        }
-        console.log('formulaire contact :')
-        console.log(contact);
-    } else {
-        return false;
-    }
-    // les mettre dans le localStorage
-    localStorage.setItem('Contact', JSON.stringify(contact));
-   
-    //__________ mettre products et contact dans un objet à envoyer________ 
-    const sendOrder = {
-        contact,
-        products    
-    }
-    //appel de la fonction POST
-    sendingOrder(sendOrder);
-    
-}); 
+
 
 //------Conserver les data dans le champ du formulaire------
 // récupérer les data contact du localStorage
