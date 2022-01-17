@@ -222,7 +222,7 @@ const listenDelete = () => {
     }
 }
 listenDelete();
-
+getTotals()
 
 /**************************************FORMULAIRE************************************** */
 let form = document.querySelector('.cart__order__form');
@@ -360,14 +360,7 @@ const sendingOrder = (sendOrder) =>{
     .catch(err => console.log('Erreur : ' + err));
 };
 
-const orderedId = new URL(window.location.href).searchParams.get('id');  
-      
-const displayConfirmation = () => {
-    const idOrderSpan = document.querySelector('#orderId')
-    
-    console.log(orderedId)
-    idOrderSpan.innerHTML = orderedId;  
-}
+
 
 let urlToDisplay = queryActualUrl.split('/')
 if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
