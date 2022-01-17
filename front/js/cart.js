@@ -191,7 +191,7 @@ const listenInputQuantity = () => {
         // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             getTotals();
-            location.reload(true);
+            // location.reload(true);
         });
     }
 }
