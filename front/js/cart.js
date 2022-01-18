@@ -6,7 +6,7 @@ let queryActualUrl = window.location.href
 const tabItems = cart.basket;
  // tableau pour récupérer les id des produits
 let products = new Array();
-
+let productPrice = new Number ();
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
@@ -21,14 +21,19 @@ displayCart = () => {
             console.log("products", products);
             // retrouver dans les produits de l'API, les produits du panier
             let product = allProducts.find(product => product._id == p.id);
+            //productPrice = allProducts.find(product => product.price == productPrice);
+            //console.log("productPrice :", productPrice)
             console.log("product", product);
             // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
+            
         }
         listenInputQuantity();
         listenDelete();
-        
+       
+  
     });
+    getTotalPrice();
     getTotals();
     listenForm(); 
     fillForm();
@@ -167,6 +172,16 @@ displayCartItem = (product, p) => {
     initSetDelete(p);
 }
 
+// calculer le prix total
+const getTotalPrice = (p, productPrice) => {
+    let total = 0;
+    for (let p of tabItems) {
+        total += p.quantity * productPrice;
+    }
+    return total;
+}
+getTotalPrice();
+
 
 // affichage et calcul du total des articles et de la somme totale :
 const getTotals = () => {
@@ -175,7 +190,7 @@ const getTotals = () => {
     totalArticles.innerHTML = cart.getNumberProduct();
         
     let totalPrice = document.querySelector('#totalPrice');
-    totalPrice.innerHTML = cart.getTotalPrice();
+    totalPrice.innerHTML = getTotalPrice();
 }
 getTotals();
 
