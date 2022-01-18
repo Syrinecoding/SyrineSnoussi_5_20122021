@@ -29,6 +29,8 @@ displayCart = () => {
         getTotals();
     });
     listenForm(); 
+    
+
 };
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -100,7 +102,7 @@ displayCartItem = (product, p) => {
     
         let itemDesc = dom_utils.creatEl({
             className: 'cart__item__content__description',
-            innerHTML: `<h2>${product.name}</h2>\n<p>${p.option_produit}</p>\n<p>${product.price} €</p>`
+            innerHTML: `<h2>${product.name}</h2>\n<p>${p.option_produit}</p>\n<p>${product.price * p.quantity} €</p>`
         });
         last.appendChild(itemDesc);
     }
@@ -193,7 +195,7 @@ const listenInputQuantity = () => {
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             getTotals();
-            // location.reload(true);
+            location.reload(true);
         });
     }
 }
@@ -271,17 +273,13 @@ const listenForm = () => {
             contact,
             products    
         }
+        
         //appel de la fonction POST
         sendingOrder(sendOrder);
         
     }); 
     // remplir les champs de form avec le contact en storage
-    let user = getContact();
-    form.firstName.value = user.firstName;
-    form.lastName.value = user.lastName;
-    form.address.value = user.address;
-    form.city.value = user.city;
-    form.email.value = user.email;
+    
 };
 
 
@@ -292,7 +290,12 @@ function getContact() {
         return JSON.parse(user);   
     }
 };
-
+let user = getContact();
+form.firstName.value = user.firstName;
+form.lastName.value = user.lastName;
+form.address.value = user.address;
+form.city.value = user.city;
+form.email.value = user.email;
 
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (input) {
@@ -368,7 +371,6 @@ const sendingOrder = (sendOrder) =>{
     })
     .catch(err => console.log('Erreur : ' + err));
 };
-
 
 
 let urlToDisplay = queryActualUrl.split('/')
