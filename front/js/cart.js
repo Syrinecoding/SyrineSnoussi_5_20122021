@@ -10,26 +10,28 @@ let products = new Array();
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
-    //TODO mettre le fetch hors de la boucle ?
-    // boucle pour récupérer les valeurs des produits du panier
-    
+
     fetch('http://localhost:3000/api/products/')
     .then(response => response.json())
     .then(allProducts => {
         console.log("allProducts :", allProducts);
+        // boucle pour récupérer les valeurs des produits du panier
         for(let p of tabItems) {
             products.push(p.id);
             console.log("products", products);
+            // retrouver dans les produits de l'API, les produits du panier
             let product = allProducts.find(product => product._id == p.id);
             console.log("product", product);
+            // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
         }
         listenInputQuantity();
         listenDelete();
-        getTotals();
+        
     });
+    getTotals();
     listenForm(); 
-    
+    fillForm();
 
 };
 
@@ -163,7 +165,6 @@ displayCartItem = (product, p) => {
     initsetQuantity(p);
     initInputQty(p);
     initSetDelete(p);
-
 }
 
 
@@ -176,6 +177,7 @@ const getTotals = () => {
     let totalPrice = document.querySelector('#totalPrice');
     totalPrice.innerHTML = cart.getTotalPrice();
 }
+getTotals();
 
 // //modification du nombre d'items :
 const listenInputQuantity = () => {
@@ -195,7 +197,7 @@ const listenInputQuantity = () => {
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             getTotals();
-            location.reload(true);
+            //location.reload(true);
         });
     }
 }
@@ -255,7 +257,7 @@ const listenForm = () => {
         e.preventDefault();
         if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
             //récupérer les valeurs du formulaire
-            contact = {
+            let contact = {
                 firstName : form.firstName.value,
                 lastName : form.lastName.value,
                 address : form.address.value,
@@ -274,11 +276,11 @@ const listenForm = () => {
             products    
         }
         
+        
         //appel de la fonction POST
         sendingOrder(sendOrder);
         
     }); 
-    // remplir les champs de form avec le contact en storage
     
 };
 
@@ -290,12 +292,17 @@ function getContact() {
         return JSON.parse(user);   
     }
 };
-let user = getContact();
-form.firstName.value = user.firstName;
-form.lastName.value = user.lastName;
-form.address.value = user.address;
-form.city.value = user.city;
-form.email.value = user.email;
+// remplir les champs de form avec le contact en storage
+function fillForm() {
+    let form = document.querySelector('.cart__order__form');
+    let user = getContact();
+    form.firstName.value = user.firstName;
+    form.lastName.value = user.lastName;
+    form.address.value = user.address;
+    form.city.value = user.city;
+    form.email.value = user.email;
+};
+
 
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (input) {
@@ -310,13 +317,13 @@ const validNameCity = function (input) {
     if(input.value.length < 3 || input.value.length > 20) {
         nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
         nextPrenom.style.color = 'red';
-        return false;
+        
     } else if (!nameRegEx.test(input.value)) {
         nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
         nextPrenom.style.color = 'red';
-        return false;
-    }
-    return true;   
+
+    } 
+    
 };
 //--------PB!!Validation Adresse---------
 const validAddress = function (input) {
@@ -334,6 +341,7 @@ const validAddress = function (input) {
         nextAddress.style.color = 'red';
         return false;
     }
+    
 };
 //--------Validation Email---------
 const validEmail = function (input) {
@@ -351,6 +359,7 @@ const validEmail = function (input) {
         nextEmail.style.color = 'red';
         return false;
     }
+
 };
 
 
@@ -365,14 +374,12 @@ const sendingOrder = (sendOrder) =>{
     })
     .then(response => response.json())
     .then(data => {
-        //let reference = `${data.orderId}`;
         window.location = `../html/confirmation.html?id=${data.orderId}`;
-        localStorage.clear();
+        //localStorage.clear();
     })
     .catch(err => console.log('Erreur : ' + err));
 };
-
-
+     
 let urlToDisplay = queryActualUrl.split('/')
 if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
     displayConfirmation()
