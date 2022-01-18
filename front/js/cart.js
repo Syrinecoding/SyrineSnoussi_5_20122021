@@ -298,17 +298,19 @@ function getContact() {
 const validNameCity = function (input) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        '^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
-        //'^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
+        //'^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
+        '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
     );
     //récupération de la balise p d'erreur
     let nextPrenom = input.nextElementSibling
     // test de l'expression regulière
     if(input.value.length < 3 || input.value.length > 20) {
         nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
+        nextPrenom.style.color = 'red';
         return false;
     } else if (!nameRegEx.test(input.value)) {
         nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
+        nextPrenom.style.color = 'red';
         return false;
     }
     return true;   
@@ -317,7 +319,7 @@ const validNameCity = function (input) {
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '[0-9-a-zA-Z\s, ]*','g'
+        '[0-9-a-zA-ZÀ-ÿ\s, ]*','g'
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
@@ -326,6 +328,7 @@ const validAddress = function (input) {
         return true;
     }else{
         nextAddress.textContent = "Veuillez rentrer une adresse valide";
+        nextAddress.style.color = 'red';
         return false;
     }
 };
@@ -342,6 +345,7 @@ const validEmail = function (input) {
         return true;
     }else{
         nextEmail.textContent = "Veuillez entrer un email valide";
+        nextEmail.style.color = 'red';
         return false;
     }
 };
@@ -360,6 +364,7 @@ const sendingOrder = (sendOrder) =>{
     .then(data => {
         //let reference = `${data.orderId}`;
         window.location = `../html/confirmation.html?id=${data.orderId}`;
+        localStorage.clear();
     })
     .catch(err => console.log('Erreur : ' + err));
 };

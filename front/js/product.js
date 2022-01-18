@@ -56,7 +56,7 @@ promiseProduct
             nom : productData.name,
             quantity : numberItem,
             option_produit : colSelected,
-            prix : affichagePrice,
+            //prix : affichagePrice,
         }
 
         // faire le contraire : ne pas mettre dans le panier tant que pas confirmé:
