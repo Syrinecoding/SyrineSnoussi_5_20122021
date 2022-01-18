@@ -9,7 +9,6 @@ const tabItems = cart.basket;
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
-   
     //TODO mettre le fetch hors de la boucle ?
     // boucle pour récupérer les valeurs des produits du panier
     for(let p of tabItems) {
@@ -26,7 +25,7 @@ displayCart = () => {
         
             displayCartItem(product, p);
         });
-    }    
+    }   
 }
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -195,22 +194,21 @@ const listenInputQuantity = () => {
         });
     }
 }
-listenInputQuantity();
+//listenInputQuantity();
 
 // suppression d'un article du panier
 const listenDelete = () => {
     let delete_btn = document.querySelectorAll('.deleteItem');
     for(let k of delete_btn) {
         k.addEventListener('click', () => {
-            let itemToDelete = k.closest(".cart__item");
-        //récupérer son id et sa couleur :
-            let idToDelete = itemToDelete.dataset.id;
-            let colorToDelete = itemToDelete.dataset.color;
-        // trouver la référence de l'article à supprimer
+            //récupérer son id et sa couleur :
+            let idToDelete = k.closest(".cart__item").dataset.id;
+            let colorToDelete = k.closest(".cart__item").dataset.color;
+            // trouver la référence de l'article à supprimer
             let removingItem = cart.findProduct(idToDelete, colorToDelete);
-        //supprimer l'article du panier
+            //supprimer l'article du panier
             cart.remove(removingItem);
-        // supprimer l'article du DOM
+            // supprimer l'article du DOM
             if (cart.length > 0){
                 document.querySelector('#cart__items').removeChild(itemToDelete);
             } else {
@@ -221,7 +219,7 @@ const listenDelete = () => {
         });
     }
 }
-listenDelete();
+//listenDelete();
 getTotals()
 
 /**************************************FORMULAIRE************************************** */
