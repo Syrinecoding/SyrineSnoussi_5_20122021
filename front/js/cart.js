@@ -5,28 +5,31 @@ let queryActualUrl = window.location.href
 // variable contenu du localStorage
 const tabItems = cart.basket;
  // tableau pour récupérer les id des produits
- let products = new Array();
+let products = new Array();
+
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
     //TODO mettre le fetch hors de la boucle ?
     // boucle pour récupérer les valeurs des produits du panier
-    for(let p of tabItems) {
-        products.push(p.id);
-        console.log("products")
-        console.log(products)
-        fetch('http://localhost:3000/api/products/'+ p.id)
-        .then(response => response.json())
-        .then(product =>{
-            console.log("product")
-            console.log(product)
-            console.log("p")
-            console.log(p)
-        
-            displayCartItem(product, p);
-        });
-    }   
-}
+    
+    fetch('http://localhost:3000/api/products/')
+    .then(response => response.json())
+    .then(allProducts => {
+        console.log("allProducts :", allProducts);
+        for(let p of tabItems) {
+            products.push(p.id);
+            console.log("products", products);
+            let product = allProducts.find(product => product._id == p.id);
+            console.log("product", product);
+            displayCartItem(product, p); 
+        }
+        listenInputQuantity();
+        listenDelete();
+        getTotals();
+    });
+    listenForm(); 
+};
 
 // fonction pour générer les éléments du DOM à ajouter
 let dom_utils = {};
@@ -179,22 +182,22 @@ const listenInputQuantity = () => {
     //boucle pour récupérer les modifications de quantité sur le panier
     for (let j of inputNumber) {
         j.addEventListener('change', (event) => {
-        // récupérer la nouvelle valeur:
+            // récupérer la nouvelle valeur:
             let newArticleQuantity = event.target.value;
-        //récupérer l'id et la couleur de l'article modifié
+            //récupérer l'id et la couleur de l'article modifié
             let changedArticle = j.closest(".cart__item");
             let changedArticleId = changedArticle.dataset.id;
             let changedArticleColor = changedArticle.dataset.color;
-        //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
+            //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
             let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
-        // modifier la quantité dans le panier
+            // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             getTotals();
             // location.reload(true);
         });
     }
 }
-//listenInputQuantity();
+
 
 // suppression d'un article du panier
 const listenDelete = () => {
@@ -210,7 +213,7 @@ const listenDelete = () => {
             cart.remove(removingItem);
             // supprimer l'article du DOM
             if (cart.length > 0){
-                document.querySelector('#cart__items').removeChild(itemToDelete);
+                document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
             } else {
                 let sectionArticles = document.querySelector('#cart__items');
                 sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
@@ -219,60 +222,69 @@ const listenDelete = () => {
         });
     }
 }
-//listenDelete();
-getTotals()
+
 
 /**************************************FORMULAIRE************************************** */
-let form = document.querySelector('.cart__order__form');
-// ecouter la modification du prenom 
-form.firstName.addEventListener('change', function(){
-    validNameCity(this);
-});
-// ecouter la modification du nom
-form.lastName.addEventListener('change', function(){
-    validNameCity(this)
-});
-// ecouter la modification de la ville
-form.city.addEventListener('change', function(){
-    validNameCity(this)
-});
-// ecouter la modification de l'adresse
-form.address.addEventListener('change', function(){
-    validAddress(this)
-});
-// ecouter la modification de l'email
-form.email.addEventListener('change', function(){
-    validEmail(this)
-});
-// ecouter le bouton commander
-form.addEventListener('submit', (e) =>{
-    e.preventDefault();
-    if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
-        //récupérer les valeurs du formulaire
-        contact = {
-            firstName : form.firstName.value,
-            lastName : form.lastName.value,
-            address : form.address.value,
-            city : form.city.value,
-            email : form.email.value
-        }
-        console.log('formulaire contact :')
-        console.log(contact);
-    } 
-    // les mettre dans le localStorage
-    localStorage.setItem('Contact', JSON.stringify(contact));
-
-    //__________ mettre products et contact dans un objet à envoyer________ 
-    const sendOrder = {
-        contact,
-        products    
-    }
-    //appel de la fonction POST
-    sendingOrder(sendOrder);
+//écouter le formulaire et valider la commande
+const listenForm = () => {
+    let form = document.querySelector('.cart__order__form');
+    // ecouter la modification du prenom 
+    form.firstName.addEventListener('change', function(){
+        validNameCity(this);
+    });
+    // ecouter la modification du nom
+    form.lastName.addEventListener('change', function(){
+        validNameCity(this)
+    });
+    // ecouter la modification de la ville
+    form.city.addEventListener('change', function(){
+        validNameCity(this)
+    });
+    // ecouter la modification de l'adresse
+    form.address.addEventListener('change', function(){
+        validAddress(this)
+    });
+    // ecouter la modification de l'email
+    form.email.addEventListener('change', function(){
+        validEmail(this)
+    });
+    // ecouter le bouton commander
+    form.addEventListener('submit', (e) =>{
+        e.preventDefault();
+        if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
+            //récupérer les valeurs du formulaire
+            contact = {
+                firstName : form.firstName.value,
+                lastName : form.lastName.value,
+                address : form.address.value,
+                city : form.city.value,
+                email : form.email.value
+            }
+            console.log('formulaire contact :')
+            console.log(contact);
+        } 
+        // les mettre dans le localStorage
+        localStorage.setItem('Contact', JSON.stringify(contact));
     
-}); 
+        //__________ mettre products et contact dans un objet à envoyer________ 
+        const sendOrder = {
+            contact,
+            products    
+        }
+        //appel de la fonction POST
+        sendingOrder(sendOrder);
+        
+    }); 
+    // remplir les champs de form avec le contact en storage
+    let user = getContact();
+    form.firstName.value = user.firstName;
+    form.lastName.value = user.lastName;
+    form.address.value = user.address;
+    form.city.value = user.city;
+    form.email.value = user.email;
+};
 
-//------Conserver les data dans le champ du formulaire------
+
 // récupérer les data contact du localStorage
 function getContact() {
     let user = localStorage.getItem('Contact');
@@ -280,13 +292,7 @@ function getContact() {
         return JSON.parse(user);   
     }
 };
-// les afficher
-let user = getContact();
-form.firstName.value = user.firstName;
-form.lastName.value = user.lastName;
-form.address.value = user.address;
-form.city.value = user.city;
-form.email.value = user.email;
+
 
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (input) {
