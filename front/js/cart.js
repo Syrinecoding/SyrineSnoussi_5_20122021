@@ -22,8 +22,7 @@ displayCart = () => {
             // calculer la somme totale dûe
             total += p.quantity * product.price;
             // afficher cart__item pour chaque produit
-            displayCartItem(product, p); 
-               
+            displayCartItem(product, p);     
         }
         listenInputQuantity();
         listenDelete();  
@@ -235,40 +234,42 @@ const listenDelete = () => {
 //écouter le formulaire et valider la commande
 const listenForm = () => {
    
-    let form = document.querySelector('.cart__order__form');
+    const form = document.querySelector('.cart__order__form');
     // ecouter la modification du prenom 
-    form.firstName.addEventListener('input', function(){
+    form.firstName.addEventListener('change', function(){
         validNameCity(this);      
     });
     // ecouter la modification du nom
-    form.lastName.addEventListener('input', function(){
+    form.lastName.addEventListener('change', function(){
         validNameCity(this);        
     });
     // ecouter la modification de la ville
-    form.city.addEventListener('input', function(){
+    form.city.addEventListener('change', function(){
         validNameCity(this);       
     });
     // ecouter la modification de l'adresse
-    form.address.addEventListener('input', function(){
+    form.address.addEventListener('change', function(){
         validAddress(this);
     });
     // ecouter la modification de l'email
-    form.email.addEventListener('input', function(){
+    form.email.addEventListener('change', function(){
         validEmail(this);        
     });
-   
     // ecouter le bouton commander
     form.addEventListener('submit', (e) =>{
         e.preventDefault();
+        // PB :la condition ne s'exécute pas...
         if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
+            console.log('condition valide ?')
             //récupérer les valeurs du formulaire
-            contact = {
+            let contact = {
                 firstName : form.firstName.value,
                 lastName : form.lastName.value,
                 address : form.address.value,
                 city : form.city.value,
                 email : form.email.value
             }
+            console.log (contact);
             
         } 
         console.log('formulaire contact :')
@@ -283,7 +284,7 @@ const listenForm = () => {
         };
         console.log(sendOrder);
         //appel de la fonction POST
-        sendingOrder(sendOrder);
+        //sendingOrder(sendOrder);
         
     }); 
     
@@ -291,22 +292,29 @@ const listenForm = () => {
 
 
 // récupérer les data contact du localStorage
-function getContact() {
-    let user = localStorage.getItem('Contact');
-    if (user != null) {
-        return JSON.parse(user);   
-    }
-};
+// function getContact() {
+//     let user = localStorage.getItem('Contact');
+//     let form = document.querySelector('.cart__order__form');
+//     if (user != null) {
+//         return JSON.parse(user); 
+//         form.firstName.value = user.firstName;
+//         form.lastName.value = user.lastName;
+//         form.address.value = user.address;
+//         form.city.value = user.city;
+//         form.email.value = user.email;  
+//     } 
+// };
 // remplir les champs de form avec le contact en storage
-function fillForm() {
-    let form = document.querySelector('.cart__order__form');
-    let user = getContact();
-    form.firstName.value = user.firstName;
-    form.lastName.value = user.lastName;
-    form.address.value = user.address;
-    form.city.value = user.city;
-    form.email.value = user.email;
-};
+// function fillForm() {
+//     let form = document.querySelector('.cart__order__form');
+//     let user = getContact();
+//     console.log(user)
+//     form.firstName.value = user.firstName;
+//     form.lastName.value = user.lastName;
+//     form.address.value = user.address;
+//     form.city.value = user.city;
+//     form.email.value = user.email;
+// };
 
 
 //--------Validation Prénom, Nom et Ville---------
@@ -337,7 +345,7 @@ const validNameCity = function (inputNC) {
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '(([0-9a-zA-ZÀ-Ÿà-ÿ,. ]+) ?([a-zA-ZÀ-Ÿà-ÿ0-9]*)', 'g'
+        '(([0-9a-zA-ZÀ-Ÿà-ÿ,]+)?([a-zA-ZÀ-Ÿà-ÿ0-9]*))', 'g'
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
@@ -366,6 +374,7 @@ const validEmail = function (inputEmail) {
     }else{
         nextEmail.textContent = "Veuillez entrer un email valide";
         nextEmail.style.color = 'red';
+        return false;
     }
 };
 
