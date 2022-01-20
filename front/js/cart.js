@@ -1,43 +1,37 @@
 // gérer l'affichage du panier et de la page confirmation
 let queryActualUrl = window.location.href
-
-
 // variable contenu du localStorage
 const tabItems = cart.basket;
  // tableau pour récupérer les id des produits
 let products = new Array();
-let productPrice = new Number ();
+// initialiser la variable du prix total des articles
+let total = 0 ;
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
-
+    // récupérer les produits de l'API
     fetch('http://localhost:3000/api/products/')
     .then(response => response.json())
     .then(allProducts => {
-        console.log("allProducts :", allProducts);
         // boucle pour récupérer les valeurs des produits du panier
         for(let p of tabItems) {
+            // récupérer les id pour le POST
             products.push(p.id);
-            console.log("products", products);
             // retrouver dans les produits de l'API, les produits du panier
             let product = allProducts.find(product => product._id == p.id);
-            //productPrice = allProducts.find(product => product.price == productPrice);
-            //console.log("productPrice :", productPrice)
-            console.log("product", product);
+            // calculer la somme totale dûe
+            total += p.quantity * product.price;
             // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
-            
+               
         }
         listenInputQuantity();
-        listenDelete();
-       
-  
+        listenDelete();  
+        getTotalPrice(total); 
     });
-    getTotalPrice();
-    getTotals();
+    getTotalArticles();
     listenForm(); 
     fillForm();
-
 };
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -103,16 +97,19 @@ displayCartItem = (product, p) => {
         last.appendChild(divContent);
     }
     // la div description
+    let displayPrice;
     function initDescription(p, product) {
         let parents = document.querySelectorAll('.cart__item__content');
-        let last = parents[parents.length -1]
+        let last = parents[parents.length -1];
+        displayPrice = product.price * p.quantity;
     
         let itemDesc = dom_utils.creatEl({
             className: 'cart__item__content__description',
-            innerHTML: `<h2>${product.name}</h2>\n<p>${p.option_produit}</p>\n<p>${product.price * p.quantity} €</p>`
+            innerHTML: `<h2>${product.name}</h2>\n<p>${p.option_produit}</p>\n<p>${displayPrice} €</p>`
         });
         last.appendChild(itemDesc);
     }
+    
     // la div settings
     function initSettings() {
         let parents = document.querySelectorAll('.cart__item__content');
@@ -172,29 +169,19 @@ displayCartItem = (product, p) => {
     initSetDelete(p);
 }
 
-// calculer le prix total
-const getTotalPrice = (p, productPrice) => {
-    let total = 0;
-    for (let p of tabItems) {
-        total += p.quantity * productPrice;
-    }
-    return total;
+// afficher le prix total
+const getTotalPrice = (total) => {
+    const totalPrice = document.querySelector('#totalPrice');
+    totalPrice.innerHTML = total;
 }
-getTotalPrice();
 
-
-// affichage et calcul du total des articles et de la somme totale :
-const getTotals = () => {
-    
-    let totalArticles = document.querySelector('#totalQuantity');
-    totalArticles.innerHTML = cart.getNumberProduct();
-        
-    let totalPrice = document.querySelector('#totalPrice');
-    totalPrice.innerHTML = getTotalPrice();
+// affichage et calcul du total des articles :
+const getTotalArticles = () => {
+    const totalArticles = document.querySelector('#totalQuantity');
+    totalArticles.innerHTML = cart.getNumberProduct();  
 }
-getTotals();
 
-// //modification du nombre d'items :
+// modification du nombre d'items :
 const listenInputQuantity = () => {
     // //sélectionner tous les input number
     let inputNumber = document.querySelectorAll('input[type=number].itemQuantity');
@@ -211,8 +198,8 @@ const listenInputQuantity = () => {
             let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
-            getTotals();
-            //location.reload(true);
+            getTotalArticles();
+            location.reload(true);
         });
     }
 }
@@ -237,7 +224,8 @@ const listenDelete = () => {
                 let sectionArticles = document.querySelector('#cart__items');
                 sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
             }
-            getTotals();
+            getTotalArticles();
+            location.reload(true);
         });
     }
 }
@@ -290,7 +278,6 @@ const listenForm = () => {
             contact,
             products    
         }
-        
         
         //appel de la fonction POST
         sendingOrder(sendOrder);
