@@ -237,23 +237,23 @@ const listenForm = () => {
    
     let form = document.querySelector('.cart__order__form');
     // ecouter la modification du prenom 
-    form.firstName.addEventListener('change', function(){
+    form.firstName.addEventListener('input', function(){
         validNameCity(this);      
     });
     // ecouter la modification du nom
-    form.lastName.addEventListener('change', function(){
+    form.lastName.addEventListener('input', function(){
         validNameCity(this);        
     });
     // ecouter la modification de la ville
-    form.city.addEventListener('change', function(){
+    form.city.addEventListener('input', function(){
         validNameCity(this);       
     });
     // ecouter la modification de l'adresse
-    form.address.addEventListener('change', function(){
+    form.address.addEventListener('input', function(){
         validAddress(this);
     });
     // ecouter la modification de l'email
-    form.email.addEventListener('change', function(){
+    form.email.addEventListener('input', function(){
         validEmail(this);        
     });
    
@@ -310,40 +310,41 @@ function fillForm() {
 
 
 //--------Validation Prénom, Nom et Ville---------
-const validNameCity = function (input) {
+const validNameCity = function (inputNC) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
         //'^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
         '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
     );
     //récupération de la balise p d'erreur
-    let nextPrenom = input.nextElementSibling
+    let nextPrenom = inputNC.nextElementSibling
     // test de l'expression regulière
-    if(input.value.length < 3 || input.value.length > 20) {
+    if(inputNC.value.length < 3 || inputNC.value.length > 20) {
         nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
         nextPrenom.style.color = 'red';
         return false;
         
-    } else if (!nameRegEx.test(input.value)) {
+    } else if (!nameRegEx.test(inputNC.value)) {
         nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
         nextPrenom.style.color = 'red';
         return false;
     } else {
+        nextPrenom.textContent = "";
         return true;
     }
-    
 };
 //--------PB!!Validation Adresse---------
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '[0-9-a-zA-ZÀ-ÿ\s, ]*','g'
+        '(([0-9a-zA-ZÀ-Ÿà-ÿ,. ]+) ?([a-zA-ZÀ-Ÿà-ÿ0-9]*)', 'g'
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
     // test de l'expression regulière
     if (addressRegEx.test(input.value)) {
-        return true;
+        nextAddress.textContent = "";
+        return true;  
     }else{
         nextAddress.textContent = "Veuillez rentrer une adresse valide";
         nextAddress.style.color = 'red';
@@ -352,22 +353,20 @@ const validAddress = function (input) {
     
 };
 //--------Validation Email---------
-const validEmail = function (input) {
+const validEmail = function (inputEmail) {
     // regex de validation de l'adresse mail
     let emailRegEx = new RegExp(
         '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,15}$', 'g'
     );
     //récupération de la balise p d'erreur
-    let nextEmail = input.nextElementSibling
+    let nextEmail = inputEmail.nextElementSibling
     // test de l'expression regulière
-    if (emailRegEx.test(input.value)) {
-        return true;
+    if (emailRegEx.test(inputEmail.value)) {
+        nextEmail.textContent = "";  
     }else{
         nextEmail.textContent = "Veuillez entrer un email valide";
         nextEmail.style.color = 'red';
-        return false;
     }
-
 };
 
 
