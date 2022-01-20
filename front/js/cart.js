@@ -30,7 +30,7 @@ displayCart = () => {
     });
     getTotalArticles();
     listenForm(); 
-    //fillForm();
+    
 };
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -270,21 +270,18 @@ const listenForm = () => {
                 email : form.email.value
             }
             console.log (contact);
-            
-        } 
-        console.log('formulaire contact :')
-        console.log(contact);
-        // les mettre dans le localStorage
-        localStorage.setItem('Contact', JSON.stringify(contact));
-    
-        //__________ mettre products et contact dans un objet à envoyer________ 
-        const sendOrder = {
-            contact,
-            products    
-        };
-        console.log(sendOrder);
-        //appel de la fonction POST
-        //sendingOrder(sendOrder);
+            // les mettre dans le localStorage
+            localStorage.setItem('Contact', JSON.stringify(contact));
+            const sendOrder = {
+                contact,
+                products    
+            };
+             //__________ mettre products et contact dans un objet à envoyer________ 
+        
+            console.log(sendOrder);
+            //appel de la fonction POST
+            sendingOrder(sendOrder);
+        }
         
     }); 
     
@@ -304,7 +301,7 @@ const listenForm = () => {
 //         form.email.value = user.email;  
 //     } 
 // };
-// remplir les champs de form avec le contact en storage
+//remplir les champs de form avec le contact en storage
 // function fillForm() {
 //     let form = document.querySelector('.cart__order__form');
 //     let user = getContact();
@@ -371,6 +368,7 @@ const validEmail = function (inputEmail) {
     // test de l'expression regulière
     if (emailRegEx.test(inputEmail.value)) {
         nextEmail.textContent = "";  
+        return true;
     }else{
         nextEmail.textContent = "Veuillez entrer un email valide";
         nextEmail.style.color = 'red';
