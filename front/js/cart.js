@@ -31,7 +31,7 @@ displayCart = () => {
     });
     getTotalArticles();
     listenForm(); 
-    fillForm();
+    //fillForm();
 };
 
 // fonction pour générer les éléments du DOM à ajouter
@@ -234,42 +234,45 @@ const listenDelete = () => {
 /**************************************FORMULAIRE************************************** */
 //écouter le formulaire et valider la commande
 const listenForm = () => {
+   
     let form = document.querySelector('.cart__order__form');
     // ecouter la modification du prenom 
     form.firstName.addEventListener('change', function(){
-        validNameCity(this);
+        validNameCity(this);      
     });
     // ecouter la modification du nom
     form.lastName.addEventListener('change', function(){
-        validNameCity(this)
+        validNameCity(this);        
     });
     // ecouter la modification de la ville
     form.city.addEventListener('change', function(){
-        validNameCity(this)
+        validNameCity(this);       
     });
     // ecouter la modification de l'adresse
     form.address.addEventListener('change', function(){
-        validAddress(this)
+        validAddress(this);
     });
     // ecouter la modification de l'email
     form.email.addEventListener('change', function(){
-        validEmail(this)
+        validEmail(this);        
     });
+   
     // ecouter le bouton commander
     form.addEventListener('submit', (e) =>{
         e.preventDefault();
         if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
             //récupérer les valeurs du formulaire
-            let contact = {
+            contact = {
                 firstName : form.firstName.value,
                 lastName : form.lastName.value,
                 address : form.address.value,
                 city : form.city.value,
                 email : form.email.value
             }
-            console.log('formulaire contact :')
-            console.log(contact);
+            
         } 
+        console.log('formulaire contact :')
+        console.log(contact);
         // les mettre dans le localStorage
         localStorage.setItem('Contact', JSON.stringify(contact));
     
@@ -277,8 +280,8 @@ const listenForm = () => {
         const sendOrder = {
             contact,
             products    
-        }
-        
+        };
+        console.log(sendOrder);
         //appel de la fonction POST
         sendingOrder(sendOrder);
         
@@ -319,12 +322,15 @@ const validNameCity = function (input) {
     if(input.value.length < 3 || input.value.length > 20) {
         nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
         nextPrenom.style.color = 'red';
+        return false;
         
     } else if (!nameRegEx.test(input.value)) {
         nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
         nextPrenom.style.color = 'red';
-
-    } 
+        return false;
+    } else {
+        return true;
+    }
     
 };
 //--------PB!!Validation Adresse---------
@@ -377,7 +383,7 @@ const sendingOrder = (sendOrder) =>{
     .then(response => response.json())
     .then(data => {
         window.location = `../html/confirmation.html?id=${data.orderId}`;
-        //localStorage.clear();
+        localStorage.clear();
     })
     .catch(err => console.log('Erreur : ' + err));
 };
