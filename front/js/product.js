@@ -61,9 +61,9 @@ promiseProduct
 
         // faire le contraire : ne pas mettre dans le panier tant que pas confirmé:
         const confirmWindow = () => {
-            if(window.confirm(`${numberItem} ${selection.nom} couleur ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
-                window.location.href = "cart.html"    
-                //utiliser opérateur ternaire pour la conjugaison    
+    
+            if(window.confirm(`${numberItem} ${selection.nom}, couleur ${colSelected}, ${(numberItem <= 1) ? "a bien été ajouté " : "ont bien été ajoutés"} au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
+                window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
                 cart.remove(selection);
