@@ -72,11 +72,11 @@ promiseProduct
         console.log(selection);
         
 
-        if(colSelected != '' && numberItem != 0) {
+        if(colSelected != '' && numberItem != 0 && numberItem <= 100) {
             cart.add(selection);
             confirmWindow()
         }else if(colSelected != '') {
-            alert(`Veuillez indiquer le nombre de ${selection.nom} souhaité`);
+            alert(`Veuillez indiquer un nombre de ${selection.nom} inférieur à 100`);
         }else{
             alert(`Veuillez choisir une couleur`);
         }

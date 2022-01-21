@@ -36,7 +36,7 @@ class Basket {
     changeQuantity(product, quantity) {
         //TODO tester si le product est null que faire : console.log product null
         let foundProduct = this.findProduct(product.id, product.option_produit);
-        if (foundProduct != undefined) {
+        if (foundProduct != undefined && foundProduct <= 100) {
             foundProduct.quantity = parseInt(quantity);
             if (foundProduct.quantity < 1) {
                 this.remove(foundProduct);

@@ -189,6 +189,9 @@ const listenInputQuantity = () => {
         j.addEventListener('change', (event) => {
             // récupérer la nouvelle valeur:
             let newArticleQuantity = event.target.value;
+            if(newArticleQuantity > 100) {
+                alert(`Veuillez indiquer un nombre inférieur à 100`)
+            }
             //récupérer l'id et la couleur de l'article modifié
             let changedArticle = j.closest(".cart__item");
             let changedArticleId = changedArticle.dataset.id;
@@ -280,7 +283,7 @@ const listenForm = () => {
         
             console.log(sendOrder);
             //appel de la fonction POST
-            sendingOrder(sendOrder);
+            //sendingOrder(sendOrder);
         }
         
     }); 
