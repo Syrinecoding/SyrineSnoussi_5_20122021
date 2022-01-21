@@ -283,7 +283,7 @@ const listenForm = () => {
         
             console.log(sendOrder);
             //appel de la fonction POST
-            //sendingOrder(sendOrder);
+            sendingOrder(sendOrder);
         }
         
     }); 
