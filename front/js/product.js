@@ -53,14 +53,14 @@ promiseProduct
             nom : productData.name,
             quantity : numberItem,
             option_produit : colSelected,
-            prix : affichagePrice,
+            //prix : affichagePrice,
         }
 
         // faire le contraire : ne pas mettre dans le panier tant que pas confirmé:
         const confirmWindow = () => {
-            if(window.confirm(`${numberItem} ${selection.nom} couleur ${colSelected} a bien été ajouté au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
-                window.location.href = "cart.html"    
-                //utiliser opérateur ternaire pour la conjugaison    
+    
+            if(window.confirm(`${numberItem} ${selection.nom}, couleur ${colSelected}, ${(numberItem <= 1) ? "a bien été ajouté " : "ont bien été ajoutés"} au panier. \nConsulter le panier : OK ou revenir à l'accueil : ANNULER`)){
+                window.location.href = "cart.html"        
             }else{
                 window.location.href = "index.html";
                 cart.remove(selection);
@@ -69,11 +69,11 @@ promiseProduct
         console.log(selection);
         
 
-        if(colSelected != '' && numberItem != 0) {
+        if(colSelected != '' && numberItem != 0 && numberItem <= 100) {
             cart.add(selection);
             confirmWindow()
         }else if(colSelected != '') {
-            alert(`Veuillez indiquer le nombre de ${selection.nom} souhaité`);
+            alert(`Veuillez indiquer un nombre de ${selection.nom} inférieur à 100`);
         }else{
             alert(`Veuillez choisir une couleur`);
         }

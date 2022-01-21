@@ -1,9 +1,9 @@
-const orderedId = new URL(window.location.href).searchParams.get('id');
-        
-const confirmOrder = () => {
-    let idOrder = document.querySelector('#orderId')
-    if (document.URL.includes('confirmation.html')) {
-        idOrder.innerHTML = orderedId;
-    }
+const orderedId = new URL(window.location.href).searchParams.get('id'); 
+
+const displayConfirmation = () => {
+    const idOrderSpan = document.querySelector('#orderId')
+    
+    console.log(orderedId)
+    idOrderSpan.innerHTML = orderedId;  
 }
-confirmOrder()
+displayConfirmation()
