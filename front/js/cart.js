@@ -321,7 +321,6 @@ const listenForm = () => {
 const validNameCity = function (inputNC) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        //'^([a-z]{3,20})?([-]{0,1})?([a-z]{3,20})$','i'
         '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
     );
     //récupération de la balise p d'erreur
@@ -333,7 +332,7 @@ const validNameCity = function (inputNC) {
         return false;
         
     } else if (!nameRegEx.test(inputNC.value)) {
-        nextPrenom.textContent = "Le champs ne doit contenir aucun caractères spéciaux.";
+        nextPrenom.textContent = "Le champs ne doit pas contenir de chiffres ou de caractères spéciaux.";
         nextPrenom.style.color = 'red';
         return false;
     } else {
@@ -345,7 +344,7 @@ const validNameCity = function (inputNC) {
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
-        '(([0-9a-zA-ZÀ-Ÿà-ÿ,]+)?([a-zA-ZÀ-Ÿà-ÿ0-9]*))', 'g'
+        "^[0-9]{1,4}[a-zA-ZÀ-Ÿà-ÿ,'0-9\\s]+$"
     );   
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
