@@ -189,6 +189,7 @@ const listenInputQuantity = () => {
         j.addEventListener('change', (event) => {
             // récupérer la nouvelle valeur:
             let newArticleQuantity = event.target.value;
+            console.log(newArticleQuantity);
             if(newArticleQuantity > 100) {
                 alert(`Veuillez indiquer un nombre inférieur à 100`)
             }
@@ -198,14 +199,25 @@ const listenInputQuantity = () => {
             let changedArticleColor = changedArticle.dataset.color;
             //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
             let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
+            console.log(cart);
+            console.log(changingArticle);
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
+            console.log(newArticleQuantity)
+            // modifier la quantité et le prix dans le DOM 
+            //let diplayPrice = product.price * newArticleQuantity;
+            // changeOneTotal(newArticleQuantity, product)
+            
+            //location.reload(true);
             getTotalArticles();
-            location.reload(true);
+            getTotalPrice();
         });
+        
     }
 }
-
+// const changeOneTotal = (newArticleQuantity, product) => {
+//     let diplayPrice = product.price * newArticleQuantity;
+// }
 
 // suppression d'un article du panier
 const listenDelete = () => {
@@ -218,7 +230,8 @@ const listenDelete = () => {
             // trouver la référence de l'article à supprimer
             let removingItem = cart.findProduct(idToDelete, colorToDelete);
             //supprimer l'article du panier
-            cart.remove(removingItem);
+            confirmDelete(removingItem);
+            // cart.remove(removingItem);
             // supprimer l'article du DOM
             if (cart.length > 0){
                 document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
@@ -227,11 +240,19 @@ const listenDelete = () => {
                 sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
             }
             getTotalArticles();
-            location.reload(true);
+            //location.reload(true);
         });
     }
 }
-
+const confirmDelete = (removingItem) => {
+    
+    if(window.confirm(`Voulez-vous vraiment supprimer ce produit du panier ? \nSupprimer l'article : OK ou le conserver : ANNULER`)){
+        cart.remove(removingItem); 
+        getTotalArticles();       
+    }// }else{
+    //     cart.save(removingItem);
+    // }
+}
 
 /**************************************FORMULAIRE************************************** */
 //écouter le formulaire et valider la commande
@@ -263,7 +284,6 @@ const listenForm = () => {
         e.preventDefault();
         // PB :la condition ne s'exécute pas...
         if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
-            console.log('condition valide ?')
             //récupérer les valeurs du formulaire
             let contact = {
                 firstName : form.firstName.value,
@@ -283,12 +303,22 @@ const listenForm = () => {
         
             console.log(sendOrder);
             //appel de la fonction POST
-            sendingOrder(sendOrder);
+            //sendingOrder(sendOrder);
+            console.log(cart.length);
+            checkBasket(sendOrder);
         }
         
     }); 
     
 };
+const checkBasket = (sendOrder) => {
+    if (cart.length < 1) {
+        alert("Votre panier est vide ! Pour commander un article, revenez à la page Accueil.")
+    } else {
+        sendingOrder(sendOrder);
+    }
+   
+} 
 
 
 // récupérer les data contact du localStorage

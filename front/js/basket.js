@@ -18,7 +18,9 @@ class Basket {
     }
     add(product) {
         //let foundProduct = this.basket.find(p => p.id == product.id && p.option_produit == product.option_produit);
+        
         let foundProduct = this.findProduct(product.id, product.option_produit)
+
         if (foundProduct != undefined) {
             foundProduct.quantity = product.quantity;
         } else {
@@ -36,8 +38,8 @@ class Basket {
     changeQuantity(product, quantity) {
         //TODO tester si le product est null que faire : console.log product null
         let foundProduct = this.findProduct(product.id, product.option_produit);
-        if (foundProduct != undefined && foundProduct <= 100) {
-            foundProduct.quantity = parseInt(quantity);
+        if (foundProduct != undefined) {
+            foundProduct.quantity = Math.min(parseInt(quantity), 100);
             if (foundProduct.quantity < 1) {
                 this.remove(foundProduct);
             } else {
@@ -53,6 +55,7 @@ class Basket {
         return number;
     
     }
+    //INUTILE ?
     getTotalPrice() {
         let total = 0;
         for (let product of this.basket) {
@@ -66,6 +69,7 @@ class Basket {
             return foundProduct;
         } else {
             console.log("no product found");
+            alert("Le produit que vous recherchez n'est plus disponible.");
             return null;
         }
     }

@@ -48,8 +48,8 @@ promiseProduct
         // récupérer les valeurs sélectionnées
         let selection = {
             id : productData._id,
-            image : productData.imageUrl,
-            texteAlt : productData.altTxt,
+            //image : productData.imageUrl,
+            //texteAlt : productData.altTxt,
             nom : productData.name,
             quantity : numberItem,
             option_produit : colSelected,
@@ -82,7 +82,7 @@ promiseProduct
     }); 
 })
 )
-.catch(err => console.log('Erreur : ' + err));
+.catch(err => alert("Erreur provenant du serveur : " + err));
 
 
 
