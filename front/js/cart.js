@@ -211,15 +211,9 @@ const oneProductTotal = (id, quantity) => {
     let sum = 0;
     let prod = AllProducts.find(prod => prod._id == id);
     sum += quantity * prod.price;
-    
-    const element = document.querySelectorAll('.item__price');
-    for(let e of element) {
-        if(e.dataset.id = id){
-            e.textContent = sum;
-        }
-    }
-}
+    return sum;
 
+}
 
 // modification du nombre d'items :
 const listenInputQuantity = () => {
@@ -247,9 +241,15 @@ const listenInputQuantity = () => {
             console.log(newArticleQuantity)
             // modifier le prix dans le DOM 
             
+            const element = document.querySelector('.item__price');
+            console.log(element)
+            let prod = AllProducts.find(prod => prod._id == changedArticleId);
+            console.log("prod :", prod)
+            element.textContent = `${prod.price * newArticleQuantity} €`;
+            
             getTotalArticles();
             getTotalPrice();
-            oneProductTotal(changedArticleId, newArticleQuantity);
+            //oneProductTotal(changedArticleId, newArticleQuantity);
         });
         
     }
