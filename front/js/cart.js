@@ -42,11 +42,13 @@ displayCart = () => {
         
             // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
-            getTotalPrice();    
+            getTotalPrice(); 
+              
         }
         listenInputQuantity();
         listenDelete();  
         getTotalPrice(); 
+        
     })
     .catch(error => console.log("Erreur : " + error))
     getTotalArticles();
@@ -207,13 +209,21 @@ const getTotalArticles = () => {
     totalArticles.textContent = cart.getNumberProduct();  
 }
 // changer la quantité et le prix sur la page panier
-const oneProductTotal = (id, quantity) => {
-    let sum = 0;
-    let prod = AllProducts.find(prod => prod._id == id);
-    sum += quantity * prod.price;
-    return sum;
-
+const oneArticleTotal = () => {
+    let element = document.querySelectorAll('.cart__item');
+    let p = tabItems.find(p => p.id);
+    let prod = AllProducts.find(prod => prod.id = p.id);
+    console.log(element);
+    for(e of element) {
+        if(e.dataset.id = p.id){
+            let elementPrice = e.querySelector('.item__price');
+            console.log(elementPrice);
+            elementPrice.textContent = p.quantity * prod.price;
+        }
+        
+    }
 }
+
 
 // modification du nombre d'items :
 const listenInputQuantity = () => {
@@ -238,18 +248,15 @@ const listenInputQuantity = () => {
             console.log(changingArticle);
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
-            console.log(newArticleQuantity)
+            console.log(newArticleQuantity);
             // modifier le prix dans le DOM 
+            console.log(displayPrice);
+            console.log(document.querySelector('.item__price'));
             
-            const element = document.querySelector('.item__price');
-            console.log(element)
-            let prod = AllProducts.find(prod => prod._id == changedArticleId);
-            console.log("prod :", prod)
-            element.textContent = `${prod.price * newArticleQuantity} €`;
-            
+            oneArticleTotal();           
             getTotalArticles();
             getTotalPrice();
-            //oneProductTotal(changedArticleId, newArticleQuantity);
+            
         });
         
     }
