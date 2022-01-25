@@ -11,7 +11,21 @@ const promiseProduct = fetch(`http://localhost:3000/api/products/${id}`);
 
 //récupérer la valeurs des clés de chaque produit
 promiseProduct
-.then(response => response.json()
+.then(response => {
+    switch (response.status) {
+        case 200:
+            return response.json();
+        case 404:
+            alert("Page introuvable");
+            break;
+        case 500:
+            alert("Le serveur a rencontré une erreur");
+            break;
+        default:
+            alert("Erreur introuvable");
+            break;
+    }
+}) 
 .then(productData => {
     console.log(productData);
 
@@ -81,8 +95,7 @@ promiseProduct
         
     }); 
 })
-)
-.catch(err => alert("Erreur provenant du serveur : " + err));
+.catch(err => console.log("Erreur : " + err));
 
 
 

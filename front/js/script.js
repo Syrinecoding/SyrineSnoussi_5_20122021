@@ -1,6 +1,20 @@
 //intégrer les produits de l'API dans la page d'accueil
 fetch('http://localhost:3000/api/products')
-.then(response => response.json())
+.then(response => {
+    switch (response.status) {
+        case 200:
+            return response.json();
+        case 404:
+            alert("Page introuvable");
+            break;
+        case 500:
+            alert("Le serveur a rencontré une erreur");
+            break;
+        default:
+            alert("Erreur introuvable");
+            break;
+    }
+})
 .then(data => {
     //console.table(data);
     let article = '';
