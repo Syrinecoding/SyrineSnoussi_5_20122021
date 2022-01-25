@@ -209,13 +209,14 @@ const getTotalArticles = () => {
     totalArticles.textContent = cart.getNumberProduct();  
 }
 // changer la quantité et le prix sur la page panier
-const oneArticleTotal = () => {
+const oneArticleTotal = (id) => {
     let element = document.querySelectorAll('.cart__item');
-    let p = tabItems.find(p => p.id);
+    let p = tabItems.find(p => p.id == id);
     let prod = AllProducts.find(prod => prod.id = p.id);
     console.log(element);
     for(e of element) {
-        if(e.dataset.id = p.id){
+        if(e.dataset.id = id){
+            console.log(e.dataset.id)
             let elementPrice = e.querySelector('.item__price');
             console.log(elementPrice);
             elementPrice.textContent = p.quantity * prod.price;
@@ -253,7 +254,7 @@ const listenInputQuantity = () => {
             console.log(displayPrice);
             console.log(document.querySelector('.item__price'));
             
-            oneArticleTotal();           
+            oneArticleTotal(changedArticleId);           
             getTotalArticles();
             getTotalPrice();
             
