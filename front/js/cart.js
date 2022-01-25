@@ -5,7 +5,8 @@ const tabItems = cart.basket;
  // tableau pour récupérer les id des produits
 let products = new Array();
 // initialiser la variable du prix total des articles
-let total = 0 ;
+//let total = 0 ;
+let AllProducts = new Array();
 // afficher les produits du panier
 displayCart = () => {
     console.log("Affichage panier");
@@ -13,26 +14,31 @@ displayCart = () => {
     fetch('http://localhost:3000/api/products/')
     .then(response => response.json())
     .then(allProducts => {
+        // Récupérer tous les produits de l'API
+        for (let i of allProducts){
+            AllProducts.push(i)
+        };
+       
         // boucle pour récupérer les valeurs des produits du panier
         for(let p of tabItems) {
             // récupérer les id pour le POST
             products.push(p.id);
             // retrouver dans les produits de l'API, les produits du panier
             let product = allProducts.find(product => product._id == p.id);
-            // calculer la somme totale dûe
-            total += p.quantity * product.price;
+        
             // afficher cart__item pour chaque produit
-            displayCartItem(product, p);     
+            displayCartItem(product, p); 
+            getTotalPrice();    
         }
         listenInputQuantity();
         listenDelete();  
-        getTotalPrice(total); 
+        getTotalPrice(); 
     });
     getTotalArticles();
     listenForm(); 
     
 };
-
+//console.log(AllProducts)
 // fonction pour générer les éléments du DOM à ajouter
 let dom_utils = {};
 (function(context){
@@ -96,7 +102,7 @@ displayCartItem = (product, p) => {
         last.appendChild(divContent);
     }
     // la div description
-    let displayPrice;
+    //let displayPrice;
     function initDescription(p, product) {
         let parents = document.querySelectorAll('.cart__item__content');
         let last = parents[parents.length -1];
@@ -104,7 +110,7 @@ displayCartItem = (product, p) => {
     
         let itemDesc = dom_utils.creatEl({
             className: 'cart__item__content__description',
-            innerHTML: `<h2>${product.name}</h2>\n<p>${p.option_produit}</p>\n<p>${displayPrice} €</p>`
+            innerHTML: `<h2>${product.name}</h2><p>${p.option_produit}</p><p class="item__price">${displayPrice} €</p>`
         });
         last.appendChild(itemDesc);
     }
@@ -120,13 +126,13 @@ displayCartItem = (product, p) => {
         last.appendChild(itemSettings);
     };
     // la div quantity
-    function initsetQuantity(p) {
+    function initSetQuantity(p) {
         let parents = document.querySelectorAll('.cart__item__content__settings');
         let last = parents[parents.length -1]
     
         let itemSetQuantity = dom_utils.creatEl({
             className: 'cart__item__content__settings__quantity',
-            innerHTML: `<p>Qté : ${p.quantity}</p>`,
+            innerHTML: `<p>Qté : </p>`,
         });
         last.appendChild(itemSetQuantity);
     };
@@ -163,22 +169,41 @@ displayCartItem = (product, p) => {
     initDivContent();
     initDescription(p, product);
     initSettings();
-    initsetQuantity(p);
+    initSetQuantity(p);
     initInputQty(p);
     initSetDelete(p);
 }
 
 // afficher le prix total
-const getTotalPrice = (total) => {
+const getTotalPrice = () => {
+    let total = 0;
+    for(let p of tabItems) {
+        let prod = AllProducts.find(prod => prod._id == p.id);
+        total += p.quantity * prod.price;
+    }
     const totalPrice = document.querySelector('#totalPrice');
-    totalPrice.innerHTML = total;
+    totalPrice.textContent = total;
 }
 
 // affichage et calcul du total des articles :
 const getTotalArticles = () => {
     const totalArticles = document.querySelector('#totalQuantity');
-    totalArticles.innerHTML = cart.getNumberProduct();  
+    totalArticles.textContent = cart.getNumberProduct();  
 }
+// changer la quantité et le prix sur la page panier
+const oneProductTotal = (id, quantity) => {
+    let sum = 0;
+    let prod = AllProducts.find(prod => prod._id == id);
+    sum += quantity * prod.price;
+    
+    const element = document.querySelectorAll('.item__price');
+    for(let e of element) {
+        if(e.dataset.id = id){
+            e.textContent = sum;
+        }
+    }
+}
+
 
 // modification du nombre d'items :
 const listenInputQuantity = () => {
@@ -204,20 +229,16 @@ const listenInputQuantity = () => {
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             console.log(newArticleQuantity)
-            // modifier la quantité et le prix dans le DOM 
-            //let diplayPrice = product.price * newArticleQuantity;
-            // changeOneTotal(newArticleQuantity, product)
+            // modifier le prix dans le DOM 
             
-            //location.reload(true);
             getTotalArticles();
             getTotalPrice();
+            oneProductTotal(changedArticleId, newArticleQuantity);
         });
         
     }
 }
-// const changeOneTotal = (newArticleQuantity, product) => {
-//     let diplayPrice = product.price * newArticleQuantity;
-// }
+
 
 // suppression d'un article du panier
 const listenDelete = () => {
@@ -260,29 +281,29 @@ const listenForm = () => {
    
     const form = document.querySelector('.cart__order__form');
     // ecouter la modification du prenom 
-    form.firstName.addEventListener('change', function(){
+    form.firstName.addEventListener('input', function(){
         validNameCity(this);      
     });
     // ecouter la modification du nom
-    form.lastName.addEventListener('change', function(){
+    form.lastName.addEventListener('input', function(){
         validNameCity(this);        
     });
     // ecouter la modification de la ville
-    form.city.addEventListener('change', function(){
+    form.city.addEventListener('input', function(){
         validNameCity(this);       
     });
     // ecouter la modification de l'adresse
-    form.address.addEventListener('change', function(){
+    form.address.addEventListener('input', function(){
         validAddress(this);
     });
     // ecouter la modification de l'email
-    form.email.addEventListener('change', function(){
+    form.email.addEventListener('input', function(){
         validEmail(this);        
     });
     // ecouter le bouton commander
     form.addEventListener('submit', (e) =>{
         e.preventDefault();
-        // PB :la condition ne s'exécute pas...
+       
         if (validNameCity(form.firstName) && validNameCity(form.lastName) && validAddress(form.address) && validNameCity(form.city) && validEmail(form.email)){
             //récupérer les valeurs du formulaire
             let contact = {
@@ -424,7 +445,7 @@ const sendingOrder = (sendOrder) =>{
     })
     .catch(err => console.log('Erreur : ' + err));
 };
-     
+// TODO supprimer et garder display cart.    
 let urlToDisplay = queryActualUrl.split('/')
 if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
     displayConfirmation()

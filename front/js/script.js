@@ -1,6 +1,6 @@
 //intégrer les produits de l'API dans la page d'accueil
 fetch('http://localhost:3000/api/products')
-.then(response => response.json()
+.then(response => response.json())
 .then(data => {
     //console.table(data);
     let article = '';
@@ -15,7 +15,7 @@ fetch('http://localhost:3000/api/products')
     }
     document.querySelector('#items').innerHTML = article;
 })
-)
+
 .catch(err => console.log('Erreur : ' + err));
 
 

@@ -55,21 +55,13 @@ class Basket {
         return number;
     
     }
-    //INUTILE ?
-    getTotalPrice() {
-        let total = 0;
-        for (let product of this.basket) {
-            total += product.quantity * product.prix;
-        }
-        return total; 
-    }
+    
     findProduct(id, color) {
         let foundProduct = this.basket.find(p => p.id == id && p.option_produit == color);
         if(foundProduct != undefined) {
             return foundProduct;
         } else {
             console.log("no product found");
-            alert("Le produit que vous recherchez n'est plus disponible.");
             return null;
         }
     }
