@@ -208,20 +208,19 @@ const getTotalArticles = () => {
     const totalArticles = document.querySelector('#totalQuantity');
     totalArticles.textContent = cart.getNumberProduct();  
 }
-// changer la quantité et le prix sur la page panier
-const oneArticleTotal = (id) => {
+// changer le prix d'un article sur la page panier
+const oneArticleTotal = (id, color) => {
     let element = document.querySelectorAll('.cart__item');
-    let p = tabItems.find(p => p.id == id);
-    let prod = AllProducts.find(prod => prod.id = p.id);
+    let p = tabItems.find(p => p.id == id && p.option_produit == color);
+    let prod = AllProducts.find(prod => prod._id == p.id);
     console.log(element);
     for(e of element) {
-        if(e.dataset.id = id){
+        if(e.dataset.id == id && e.dataset.color == color){
             console.log(e.dataset.id)
             let elementPrice = e.querySelector('.item__price');
             console.log(elementPrice);
             elementPrice.textContent = p.quantity * prod.price;
-        }
-        
+        }  
     }
 }
 
@@ -254,7 +253,7 @@ const listenInputQuantity = () => {
             console.log(displayPrice);
             console.log(document.querySelector('.item__price'));
             
-            oneArticleTotal(changedArticleId);           
+            oneArticleTotal(changedArticleId, changedArticleColor);           
             getTotalArticles();
             getTotalPrice();
             
