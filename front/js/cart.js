@@ -274,26 +274,33 @@ const listenDelete = () => {
             // trouver la référence de l'article à supprimer
             let removingItem = cart.findProduct(idToDelete, colorToDelete);
             //supprimer l'article du panier
-            confirmDelete(removingItem);
             // cart.remove(removingItem);
             // supprimer l'article du DOM
-            if (cart.length > 0){
-                document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
-            } else {
-                let sectionArticles = document.querySelector('#cart__items');
-                sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>"
+            if(window.confirm(`Voulez-vous vraiment supprimer ce produit du panier ? \nSupprimer l'article : OK ou le conserver : ANNULER`)){
+                cart.remove(removingItem);
+                if (cart.length > 0){
+                    document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
+                    getTotalArticles();
+                    getTotalPrice(); 
+                    
+                } else {
+                    let sectionArticles = document.querySelector('#cart__items');
+                    sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>";
+                    
+                } 
+                getTotalArticles();
+                getTotalPrice();
+                    
             }
             getTotalArticles();
+            getTotalPrice();
             //location.reload(true);
         });
     }
 }
 const confirmDelete = (removingItem) => {
     
-    if(window.confirm(`Voulez-vous vraiment supprimer ce produit du panier ? \nSupprimer l'article : OK ou le conserver : ANNULER`)){
-        cart.remove(removingItem); 
-        getTotalArticles();       
-    }// }else{
+    // }else{
     //     cart.save(removingItem);
     // }
 }
