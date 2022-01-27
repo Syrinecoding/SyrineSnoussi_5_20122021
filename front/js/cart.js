@@ -280,21 +280,21 @@ const listenDelete = () => {
                 cart.remove(removingItem);
                 if (cart.length > 0){
                     document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
-                    getTotalArticles();
-                    getTotalPrice(); 
+                    //getTotalArticles();
+                    //getTotalPrice(); 
                     
                 } else {
                     let sectionArticles = document.querySelector('#cart__items');
                     sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>";
                     
                 } 
-                getTotalArticles();
-                getTotalPrice();
+                //getTotalArticles();
+                //getTotalPrice();
                     
             }
             getTotalArticles();
             getTotalPrice();
-            //location.reload(true);
+            location.reload(true);
         });
     }
 }
