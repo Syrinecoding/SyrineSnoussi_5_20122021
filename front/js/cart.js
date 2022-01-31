@@ -1,7 +1,7 @@
 // gérer l'affichage du panier et de la page confirmation
 let queryActualUrl = window.location.href
-// variable contenu du localStorage
-const tabItems = cart.basket;
+
+
  // tableau pour récupérer les id des produits
 let products = new Array();
 // initialiser la variable du prix total des articles
@@ -34,7 +34,7 @@ displayCart = () => {
         };
        
         // boucle pour récupérer les valeurs des produits du panier
-        for(let p of tabItems) {
+        for(let p of cart.basket) {
             // récupérer les id pour le POST
             products.push(p.id);
             // retrouver dans les produits de l'API, les produits du panier
@@ -42,16 +42,16 @@ displayCart = () => {
         
             // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
-            getTotalPrice(); 
+            //getTotalPrice(); 
               
         }
         listenInputQuantity();
         listenDelete();  
         getTotalPrice(); 
-        
+        getTotalArticles();
     })
     .catch(error => console.log("Erreur : " + error))
-    getTotalArticles();
+    
     listenForm(); 
     
 };
@@ -195,8 +195,10 @@ displayCartItem = (product, p) => {
 // afficher le prix total
 const getTotalPrice = () => {
     let total = 0;
-    for(let p of tabItems) {
+    products = [];
+    for(let p of cart.basket) {
         let prod = AllProducts.find(prod => prod._id == p.id);
+        products.push(p.id);
         total += p.quantity * prod.price;
     }
     const totalPrice = document.querySelector('#totalPrice');
@@ -211,7 +213,7 @@ const getTotalArticles = () => {
 // changer le prix d'un article sur la page panier
 const oneArticleTotal = (id, color) => {
     let element = document.querySelectorAll('.cart__item');
-    let p = tabItems.find(p => p.id == id && p.option_produit == color);
+    let p = cart.basket.find(p => p.id == id && p.option_produit == color);
     let prod = AllProducts.find(prod => prod._id == p.id);
     console.log(element);
     for(e of element) {
@@ -269,41 +271,32 @@ const listenDelete = () => {
     for(let k of delete_btn) {
         k.addEventListener('click', () => {
             //récupérer son id et sa couleur :
-            let idToDelete = k.closest(".cart__item").dataset.id;
-            let colorToDelete = k.closest(".cart__item").dataset.color;
-            // trouver la référence de l'article à supprimer
-            let removingItem = cart.findProduct(idToDelete, colorToDelete);
-            //supprimer l'article du panier
-            // cart.remove(removingItem);
-            // supprimer l'article du DOM
+            
             if(window.confirm(`Voulez-vous vraiment supprimer ce produit du panier ? \nSupprimer l'article : OK ou le conserver : ANNULER`)){
+                let idToDelete = k.closest(".cart__item").dataset.id;
+                let colorToDelete = k.closest(".cart__item").dataset.color;
+                // trouver la référence de l'article à supprimer
+                let removingItem = cart.findProduct(idToDelete, colorToDelete);
+                // supprimer l'article du localStorage et du DOM
                 cart.remove(removingItem);
                 if (cart.length > 0){
                     document.querySelector('#cart__items').removeChild(k.closest(".cart__item"));
-                    //getTotalArticles();
-                    //getTotalPrice(); 
+                   
                     
                 } else {
                     let sectionArticles = document.querySelector('#cart__items');
                     sectionArticles.innerHTML = "<h2>Votre panier est vide</h2>";
                     
                 } 
-                //getTotalArticles();
-                //getTotalPrice();
+                getTotalArticles();
+                getTotalPrice();
                     
             }
-            getTotalArticles();
-            getTotalPrice();
-            location.reload(true);
+            
         });
     }
 }
-const confirmDelete = (removingItem) => {
-    
-    // }else{
-    //     cart.save(removingItem);
-    // }
-}
+
 
 /**************************************FORMULAIRE************************************** */
 //écouter le formulaire et valider la commande
@@ -346,17 +339,15 @@ const listenForm = () => {
             console.log (contact);
             // les mettre dans le localStorage
             localStorage.setItem('Contact', JSON.stringify(contact));
+            //__________ mettre products et contact dans un objet à envoyer________ 
             const sendOrder = {
                 contact,
                 products    
             };
-             //__________ mettre products et contact dans un objet à envoyer________ 
-        
-            console.log(sendOrder);
             //appel de la fonction POST
-            //sendingOrder(sendOrder);
-            console.log(cart.length);
+            console.log(JSON.stringify(sendOrder));
             checkBasket(sendOrder);
+
         }
         
     }); 
@@ -371,44 +362,17 @@ const checkBasket = (sendOrder) => {
    
 } 
 
-
-// récupérer les data contact du localStorage
-// function getContact() {
-//     let user = localStorage.getItem('Contact');
-//     let form = document.querySelector('.cart__order__form');
-//     if (user != null) {
-//         return JSON.parse(user); 
-//         form.firstName.value = user.firstName;
-//         form.lastName.value = user.lastName;
-//         form.address.value = user.address;
-//         form.city.value = user.city;
-//         form.email.value = user.email;  
-//     } 
-// };
-//remplir les champs de form avec le contact en storage
-// function fillForm() {
-//     let form = document.querySelector('.cart__order__form');
-//     let user = getContact();
-//     console.log(user)
-//     form.firstName.value = user.firstName;
-//     form.lastName.value = user.lastName;
-//     form.address.value = user.address;
-//     form.city.value = user.city;
-//     form.email.value = user.email;
-// };
-
-
 //--------Validation Prénom, Nom et Ville---------
 const validNameCity = function (inputNC) {
     // regex de validation du prénom, du nom et de la ville
     let nameRegEx = new RegExp(
-        '^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$', 'g'
+        "^(([a-zA-ZÀ-ÿ]+[\s\-]{1}[a-zA-ZÀ-ÿ]+)|([a-zA-ZÀ-ÿ]+))$", "g"
     );
     //récupération de la balise p d'erreur
     let nextPrenom = inputNC.nextElementSibling
     // test de l'expression regulière
-    if(inputNC.value.length < 3 || inputNC.value.length > 20) {
-        nextPrenom.textContent = "Le champs doit contenir entre 3 et 20 lettres au maximum.";
+    if(inputNC.value.length < 1 || inputNC.value.length > 40) {
+        nextPrenom.textContent = "Le champs doit contenir entre 3 et 40 lettres au maximum.";
         nextPrenom.style.color = 'red';
         return false;
         
@@ -416,12 +380,12 @@ const validNameCity = function (inputNC) {
         nextPrenom.textContent = "Le champs ne doit pas contenir de chiffres ou de caractères spéciaux.";
         nextPrenom.style.color = 'red';
         return false;
-    } else {
-        nextPrenom.textContent = "";
-        return true;
     }
+    nextPrenom.textContent = "";
+    return true;
+    
 };
-//--------PB!!Validation Adresse---------
+//--------Validation Adresse---------
 const validAddress = function (input) {
     // regex de validation de l'adresse
     let addressRegEx = new RegExp(
@@ -430,15 +394,13 @@ const validAddress = function (input) {
     //récupération de la balise p d'erreur
     let nextAddress = input.nextElementSibling;
     // test de l'expression regulière
-    if (addressRegEx.test(input.value)) {
-        nextAddress.textContent = "";
-        return true;  
-    }else{
+    if (!addressRegEx.test(input.value)) {
         nextAddress.textContent = "Veuillez rentrer une adresse valide";
         nextAddress.style.color = 'red';
         return false;
     }
-    
+    nextAddress.textContent = "";
+    return true; 
 };
 //--------Validation Email---------
 const validEmail = function (inputEmail) {
@@ -449,16 +411,15 @@ const validEmail = function (inputEmail) {
     //récupération de la balise p d'erreur
     let nextEmail = inputEmail.nextElementSibling
     // test de l'expression regulière
-    if (emailRegEx.test(inputEmail.value)) {
-        nextEmail.textContent = "";  
-        return true;
-    }else{
+    if (!emailRegEx.test(inputEmail.value)) {
         nextEmail.textContent = "Veuillez entrer un email valide";
         nextEmail.style.color = 'red';
         return false;
     }
+    nextEmail.textContent = "";  
+    return true;
 };
-
+// fonction POST commande
 const sendingOrder = (sendOrder) =>{
     //-------envoi de l'objet contenant produit et contact vers le serveur--------
     const promiseOrder = fetch('http://localhost:3000/api/products/order', {
