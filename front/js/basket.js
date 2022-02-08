@@ -26,7 +26,6 @@ class Basket {
         } else {
             //product.quantity = 1;
             this.basket.push(product);
-            
         }
         this.save();
     }

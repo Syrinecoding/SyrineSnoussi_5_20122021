@@ -5,7 +5,6 @@ let queryActualUrl = window.location.href
  // tableau pour récupérer les id des produits
 let products = new Array();
 // initialiser la variable du prix total des articles
-//let total = 0 ;
 let AllProducts = new Array();
 // afficher les produits du panier
 displayCart = () => {
@@ -42,7 +41,6 @@ displayCart = () => {
         
             // afficher cart__item pour chaque produit
             displayCartItem(product, p); 
-            //getTotalPrice(); 
               
         }
         listenInputQuantity();
@@ -120,11 +118,11 @@ displayCartItem = (product, p) => {
         last.appendChild(divContent);
     }
     // la div description
-    //let displayPrice;
+
     function initDescription(p, product) {
         let parents = document.querySelectorAll('.cart__item__content');
         let last = parents[parents.length -1];
-        displayPrice = product.price * p.quantity;
+        let displayPrice = product.price * p.quantity;
     
         let itemDesc = dom_utils.creatEl({
             className: 'cart__item__content__description',
@@ -221,7 +219,7 @@ const oneArticleTotal = (id, color) => {
             console.log(e.dataset.id)
             let elementPrice = e.querySelector('.item__price');
             console.log(elementPrice);
-            elementPrice.textContent = p.quantity * prod.price;
+            elementPrice.textContent = `${p.quantity * prod.price} €`;
         }  
     }
 }
@@ -246,14 +244,13 @@ const listenInputQuantity = () => {
             let changedArticleColor = changedArticle.dataset.color;
             //retrouver dans les produits, le produit dont la valeur doit être modifiée dans le panier
             let changingArticle = cart.findProduct(changedArticleId, changedArticleColor);
-            console.log(cart);
+            //console.log(cart);
             console.log(changingArticle);
             // modifier la quantité dans le panier
             cart.changeQuantity(changingArticle, newArticleQuantity);
             console.log(newArticleQuantity);
             // modifier le prix dans le DOM 
-            console.log(displayPrice);
-            console.log(document.querySelector('.item__price'));
+            //console.log(document.querySelector('.item__price'));
             
             oneArticleTotal(changedArticleId, changedArticleColor);           
             getTotalArticles();
@@ -436,7 +433,7 @@ const sendingOrder = (sendOrder) =>{
     })
     .catch(err => console.log('Erreur : ' + err));
 };
-// TODO supprimer et garder display cart.    
+
 let urlToDisplay = queryActualUrl.split('/')
 if(urlToDisplay[urlToDisplay.length-1].startsWith('confirmation')) {
     displayConfirmation()
