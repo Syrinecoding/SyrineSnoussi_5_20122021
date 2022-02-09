@@ -22,7 +22,8 @@ class Basket {
         let foundProduct = this.findProduct(product.id, product.option_produit)
 
         if (foundProduct != undefined) {
-            foundProduct.quantity = product.quantity;
+            //foundProduct.quantity = product.quantity;
+            foundProduct.quantity = parseInt(foundProduct.quantity)+parseInt(product.quantity);
         } else {
             //product.quantity = 1;
             this.basket.push(product);
